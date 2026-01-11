@@ -75,6 +75,37 @@ void mesh::load2DRectangle_EBO(const float* vert, uint vert_size, const uint* in
 
     // unbind the Vertex Array in case any calls modify this mesh
     glBindVertexArray(0);
+    count = index_size;
+}
+
+void mesh::load2DRectangle_2DImage(const float* vert, uint vert_size, const uint* index, uint index_size, uint stride){
+    glBindVertexArray(vao);
+    
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    glBufferData(GL_ARRAY_BUFFER, vert_size, vert, GL_STATIC_DRAW);
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, index_size, index, GL_STATIC_DRAW);
+
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, stride, (void*)0);
+    glEnableVertexAttribArray(0);
+
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, stride, (void*)12);
+    glEnableVertexAttribArray(1);
+
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, stride, (void*)24);
+    glEnableVertexAttribArray(2);
+
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+    glBindVertexArray(0);
+    count = index_size/sizeof(uint);
+}
+
+void mesh::draw2DRectangle_2DImage() {
+    glBindVertexArray(vao);
+    glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, 0);
+    glBindVertexArray(0);
 }
 
 void mesh::draw2DRectangle_EBO(){

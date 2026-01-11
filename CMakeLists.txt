@@ -9,8 +9,11 @@ add_subdirectory(C:/Lib/glad  ${CMAKE_CURRENT_BINARY_DIR}/glad_library EXCLUDE_F
 add_executable(OpenGLTutorial 
     src/main.cpp 
     src/glsl_compiler.cpp
-    src/mesh.cpp)
+    src/mesh.cpp
+    src/texture.cpp
+    src/image_loader.cpp)
 
 target_include_directories(OpenGLTutorial PUBLIC include)
+target_include_directories(OpenGLTutorial PUBLIC third_party)
 
 target_link_libraries(OpenGLTutorial PRIVATE glfw PUBLIC glad)

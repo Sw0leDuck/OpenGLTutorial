@@ -5,13 +5,18 @@
 
 #include "glsl_compiler.h"
 #include "mesh.h"
+#include "texture.h"
+#include "common/algorithm.h"
 
 #define window_width 640
 #define window_height 480
 
 GLFWwindow* window;
 compiler::context glslContext;
-graphic::mesh firstTriangle;
+graphic::mesh rectShape;
+graphic::texture2D image2D_0;
+graphic::texture2D image2D_1;
+float mix = 0.5;
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow* window);
@@ -44,34 +49,50 @@ int main(void)
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
     glslContext.compileShader(
-        std::string("../../../shaders/send_color_layout.vert"),
+        std::string("../../../shaders/texture2D_location.vert"),
         GL_VERTEX_SHADER,
         0
     );
 
     glslContext.compileShader(
-        std::string("../../../shaders/receive_color.frag"),
+        std::string("../../../shaders/texture2D_location.frag"),
         GL_FRAGMENT_SHADER,
         0x1000
     );
     glslContext.linkProgram(0, 0, 0x1000);
+    glslContext.useProgram(0);
+    glslContext.setInt("ourTexture0", 0, 0);
+    glslContext.setInt("ourTexture1", 0, 1);
 
-    firstTriangle.init();
-    firstTriangle.load2DTriangle_VBO_Rainbow(graphic::vert_2DTriangle_VBO_Rainbow,
-        sizeof(graphic::vert_2DTriangle_VBO_Rainbow));
+    image2D_0.init("../../../assets/rect_stone_wall.jpg", GL_RGB);
+    image2D_0.loadTexture(false);
 
+    image2D_1.init("../../../assets/vibe-cat.png", GL_RGBA);
+    image2D_1.loadTexture(false);
+
+    rectShape.init();
+    rectShape.load2DRectangle_2DImage(
+        graphic::vert_2DRectangle_2DImage, sizeof(graphic::vert_2DRectangle_2DImage), 
+        graphic::indices, sizeof(graphic::indices), 8*sizeof(float));
+
+        
     // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
     {
         processInput(window);
-        
+            
         glClearColor(0.2f, 0.3f, 0.4f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
+            
+        glActiveTexture(GL_TEXTURE0);
+        image2D_0.bindTexture();
+        glActiveTexture(GL_TEXTURE1);
+        image2D_1.bindTexture();
         
         glslContext.useProgram(0);
-        
-        firstTriangle.draw2DTriangle_VBO();
+        glslContext.setFloat("mix_percentage", 0, mix);
+        rectShape.draw2DRectangle_2DImage();
 
         /* Swap front and back buffers */
         glfwSwapBuffers(window);
@@ -91,5 +112,13 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height){
 void processInput(GLFWwindow* window){
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
         glfwSetWindowShouldClose(window, true);
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
+        mix = common::max(mix-0.0005f, 0.1f);
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
+        mix = common::min(mix+0.0005f, 0.9f);
     }
 }
