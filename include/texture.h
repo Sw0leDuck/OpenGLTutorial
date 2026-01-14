@@ -6,18 +6,22 @@
 
 namespace graphic {
 
-    struct texture2D {
+    struct Texture2D {
         float triangleCoords[3];
         float rectangleCoords[4];
 
-        ~texture2D();
-
         void init(const std::string& filePath, GLenum type);
+        void exit();
         inline void bindTexture() { glBindTexture(GL_TEXTURE_2D, textureId); };
         void loadTexture(bool clamp);
 
         uint textureId = -1;
         GLenum type;
+    };
+
+    struct Texture3D {
+        Texture3D() {};
+        uint textureId = -1;
     };
 
 } // namespace texture

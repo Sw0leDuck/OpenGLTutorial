@@ -7,18 +7,18 @@ imageLoader::ImageLoaderManager g_image_manager;
 
 namespace graphic {
 
-    texture2D::~texture2D() {
+    void Texture2D::exit() {
         if(textureId != -1)
             glDeleteTextures(1, &textureId);
     }
 
-    void texture2D::init(const std::string& filePath, GLenum type){
+    void Texture2D::init(const std::string& filePath, GLenum type){
         glGenTextures(1, &textureId);
         g_image_manager.insertImage(filePath, textureId);
         this->type = type;
     }
 
-    void texture2D::loadTexture(bool clamp) {
+    void Texture2D::loadTexture(bool clamp) {
         glBindTexture(GL_TEXTURE_2D, textureId);
 
         if(!clamp){

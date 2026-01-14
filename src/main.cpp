@@ -4,19 +4,21 @@
 #include <iostream>
 
 #include "glsl_compiler.h"
-#include "mesh.h"
-#include "texture.h"
+#include "mesh3D.h"
 #include "common/algorithm.h"
+#include "common/primitive_vertices.h"
 
 #define window_width 640
 #define window_height 480
 
+static constexpr float g_fov = 45.0f;
+
 GLFWwindow* window;
-compiler::context glslContext;
-graphic::mesh rectShape;
-graphic::texture2D image2D_0;
-graphic::texture2D image2D_1;
-float mix = 0.5;
+compiler::Context glslContext;
+graphic::Mesh3D mesh;
+float mix = 0.01;
+float rotate = 0.0;
+float g_time = 0;
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow* window);
@@ -39,11 +41,13 @@ int main(void)
         return -1;
     }
     glfwMakeContextCurrent(window);
+    glfwSwapInterval(1);
 
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
         std::cout << "Failed to initialize GLAD\n"; 
         return -1;
     }
+    glEnable(GL_DEPTH_TEST);
 
     // glViewport(0, 0, window_width, window_height);
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
@@ -59,23 +63,19 @@ int main(void)
         GL_FRAGMENT_SHADER,
         0x1000
     );
-    glslContext.linkProgram(0, 0, 0x1000);
-    glslContext.useProgram(0);
-    glslContext.setInt("ourTexture0", 0, 0);
-    glslContext.setInt("ourTexture1", 0, 1);
+    glslContext.linkProgram(ProgramType::kDefault, 0, 0x1000);
+    glslContext.useProgram(ProgramType::kDefault);
+    glslContext.setInt("ourTexture0", ProgramType::kDefault, 0);
+    glslContext.setInt("ourTexture1", ProgramType::kDefault, 1);
 
-    image2D_0.init("../../../assets/rect_stone_wall.jpg", GL_RGB);
-    image2D_0.loadTexture(false);
 
-    image2D_1.init("../../../assets/vibe-cat.png", GL_RGBA);
-    image2D_1.loadTexture(false);
-
-    rectShape.init();
-    rectShape.load2DRectangle_2DImage(
-        graphic::vert_2DRectangle_2DImage, sizeof(graphic::vert_2DRectangle_2DImage), 
-        graphic::indices, sizeof(graphic::indices), 8*sizeof(float));
-
-        
+    mesh.init();
+    mesh.loadCube_TexCoords(graphic::cube_vertices, sizeof(graphic::cube_vertices), 5*sizeof(float));
+    
+    mesh.load2DTexture("../../../assets/doggo.jpg", GL_RGB);
+    mesh.load2DTexture("../../../assets/john-joint.jpg", GL_RGB);
+    mesh.load2DTexture("../../../assets/vibe-cat.png", GL_RGBA);
+    
     // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
@@ -83,16 +83,11 @@ int main(void)
         processInput(window);
             
         glClearColor(0.2f, 0.3f, 0.4f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
-            
-        glActiveTexture(GL_TEXTURE0);
-        image2D_0.bindTexture();
-        glActiveTexture(GL_TEXTURE1);
-        image2D_1.bindTexture();
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         
-        glslContext.useProgram(0);
-        glslContext.setFloat("mix_percentage", 0, mix);
-        rectShape.draw2DRectangle_2DImage();
+        g_time = glfwGetTime();
+
+        mesh.draw10Cubes(glslContext.getProgram(0), g_time);
 
         /* Swap front and back buffers */
         glfwSwapBuffers(window);
@@ -100,6 +95,8 @@ int main(void)
         /* Poll for and process events */
         glfwPollEvents();
     }
+
+    mesh.exit();
 
     glfwTerminate();
     return 0;
@@ -115,10 +112,18 @@ void processInput(GLFWwindow* window){
     }
 
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
-        mix = common::max(mix-0.0005f, 0.1f);
+        mix = common::max(mix-0.005f, 0.01f);
     }
 
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
-        mix = common::min(mix+0.0005f, 0.9f);
+        mix = common::min(mix+0.005f, 0.99f);
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
+        rotate += 1;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
+        rotate -= 1;
     }
 }

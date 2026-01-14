@@ -55,3 +55,19 @@ with the following settings
 - Clangd:Path
     - Insert path to the clangd binary
 
+## glm
+
+Go to https://github.com/g-truc/glm and follow the instructions of the
+ReadMe.md files.
+
+In case the file does not exist then:
+download repo
+```powershell
+cd /path/to/glm
+mkdir build
+cmake -G "MinGW Makefiles" -DGLM_BUILD_TESTS=OFF -DBUILD_SHARED_LIBS=OFF -B build .
+cmake --build build -- all
+cmake --build build -- install
+# Move new folder to C:/Lib
+```
+

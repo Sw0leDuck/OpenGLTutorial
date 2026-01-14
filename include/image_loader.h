@@ -7,7 +7,7 @@
 namespace imageLoader {
 
     struct image {
-        byte* data;
+        ubyte* data;
         int width;
         int height;
         int nrChannels;

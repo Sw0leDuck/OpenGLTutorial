@@ -22,7 +22,8 @@ ImageLoaderManager::ImageLoaderManager(){
 
 void ImageLoaderManager::insertImage(const std::string& filePath, uint imageId){
     if(image_map.find(imageId) != image_map.end()){
-        std::cerr << "ImageID already exists in image_map\n";
+        std::cerr << "ImageID already exists in image_map " << imageId << std::endl;
+        std::cerr << "Image File Name " << filePath.c_str() << std::endl;
         return;
     }
     if(!image_map[imageId].loadImage(filePath)){

@@ -6,12 +6,12 @@
 
 namespace compiler {
 
-context::~context(){
+Context::~Context(){
     for(auto& iter : _ShaderId)
         glDeleteShader(iter.second);
 
     for(auto& iter : _programId)
-        glDeleteProgram(iter.second);
+        glDeleteProgram(iter.second.id);
 }
 
 std::string loadGLSLsource(std::string filePath) {
@@ -32,7 +32,7 @@ std::string loadGLSLsource(std::string filePath) {
     return source;
 }
 
-bool context::compileShader(std::string filePath, uint shaderType, uint id) {
+bool Context::compileShader(std::string filePath, uint shaderType, uint id) {
     uint shaderId;
     shaderId = glCreateShader(shaderType);
 
@@ -71,7 +71,7 @@ bool checkCompilerStatus(uint shaderId, uint id){
     return true;
 }
 
-bool context::linkProgram(uint id, uint vertexId, uint fragmentId){
+bool Context::linkProgram(uint id, uint vertexId, uint fragmentId){
     uint programId;
     programId = glCreateProgram();
 
@@ -84,7 +84,7 @@ bool context::linkProgram(uint id, uint vertexId, uint fragmentId){
         return false;
     }
 
-    _programId[id] = programId;
+    _programId[id] = Program(programId);
 
     glDeleteShader(_ShaderId[vertexId]);
     _ShaderId.erase(vertexId);
@@ -106,14 +106,30 @@ bool checkLinkStatus(uint programId, uint id){
     return true;
 }
 
-
-
-void context::setInt(const std::string& name, uint id, uint value){
-    glUniform1i(glGetUniformLocation(_programId[id], name.c_str()), value);
+void Context::setInt(const std::string& name, uint id, uint value){
+    _programId[id].setInt(name, value);
 }
 
-void context::setFloat(const std::string& name, uint id, float value){
-    glUniform1f(glGetUniformLocation(_programId[id], name.c_str()), value);
+void Context::setFloat(const std::string& name, uint id, float value){
+    _programId[id].setFloat(name, value);
+}
+
+void Context::setMatrix(const std::string& name, uint id, float* matrix){
+    _programId[id].setMatrix(name, matrix);
+}
+
+Program::Program(uint id) : id(id) {}
+
+void Program::setInt(const std::string& name, uint value){
+    glUniform1i(glGetUniformLocation(id, name.c_str()), value);
+}
+
+void Program::setFloat(const std::string& name, float value){
+    glUniform1f(glGetUniformLocation(id, name.c_str()), value);
+}
+
+void Program::setMatrix(const std::string& name, float* matrix){
+    glUniformMatrix4fv(glGetUniformLocation(id, name.c_str()), 1, GL_FALSE, matrix);
 }
 
 } // namespace compiler
