@@ -13,7 +13,14 @@ add_executable(OpenGLTutorial
     src/mesh3D.cpp
     src/texture.cpp
     src/image_loader.cpp
-    src/matrix.cpp)
+    src/matrix.cpp
+    src/Camera/camera.cpp
+    src/Camera/fly_camera.cpp
+    src/Backend/Window/glfw_window.cpp
+    src/Backend/backend.cpp
+    src/API/gl_backend.cpp
+    src/common/error_handler.cpp
+    src/Core/game_handler.cpp)
 
 target_include_directories(OpenGLTutorial PUBLIC include)
 target_include_directories(OpenGLTutorial PUBLIC third_party)

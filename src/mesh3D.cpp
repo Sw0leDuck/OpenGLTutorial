@@ -196,6 +196,8 @@ void Mesh3D::drawArray(compiler::Program program){
         textures_2D[i].bindTexture();
     }
 
+    projection_matrice.perspective(45, 640.f/480.f, 0.1, 100.f);
+
     program.useProgram();
     program.setMatrix("modelMatrix", glm::value_ptr(model_matrice.matrix));
     program.setMatrix("viewMatrix", glm::value_ptr(view_matrice.matrix));
@@ -205,6 +207,8 @@ void Mesh3D::drawArray(compiler::Program program){
     glBindVertexArray(vao);
     glDrawArrays(GL_TRIANGLES, 0, count);
     glBindVertexArray(0);
+
+    resetMatrices();
 }
 
 void Mesh3D::draw10Cubes(compiler::Program program, float time){
@@ -215,22 +219,25 @@ void Mesh3D::draw10Cubes(compiler::Program program, float time){
 
     program.useProgram();
     
-    view_matrice.translate({0, 0, -3.f});
     projection_matrice.perspective(45, 640.f/480.f, 0.1, 100.f);
-
+    
     program.setMatrix("viewMatrix", glm::value_ptr(view_matrice.matrix));
     program.setMatrix("projectionMatrix", glm::value_ptr(projection_matrice.matrix));
 
     glBindVertexArray(vao);
     for(uint index=0; index < std::size(graphic::cubePositions); index++) {
         textures_2D[index%3].bindTexture();
+        glActiveTexture(GL_TEXTURE0);
+        textures_2D[(index+1)%3].bindTexture();
+        glActiveTexture(GL_TEXTURE1);
 
         model_matrice.translate(graphic::cubePositions[index]);
         float angle = 20.f * index;
         
-        model_matrice.fast_rotate(time, {1.f, 0.3f, 0.5f});
+        // model_matrice.rotate(time, {1.f, 0.3f, 0.5f});
 
         program.setMatrix("modelMatrix", glm::value_ptr(model_matrice.matrix));
+        program.setFloat("mix_percentage", common::max(std::sin(time), 0.01f));
 
         glDrawArrays(GL_TRIANGLES, 0, count);
         resetMatrices();
