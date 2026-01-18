@@ -1,27 +1,28 @@
 #ifndef TEXTURE_H
 #define TEXTURE_H
-#include "glad/glad.h"
 #include <string>
 #include "common/types.h"
 
 namespace graphic {
 
+#define GL_TEXTURE_2D 0x0DE1 // TODO: change this
+
     struct Texture2D {
-        float triangleCoords[3];
-        float rectangleCoords[4];
+        float _triangleCoords[3];
+        float _rectangleCoords[4];
 
-        void init(const std::string& filePath, GLenum type);
-        void exit();
-        inline void bindTexture() { glBindTexture(GL_TEXTURE_2D, textureId); };
-        void loadTexture(bool clamp);
+        void Init(const std::string& filePath, uint type);
+        void Exit();
+        void BindTexture();
+        void LoadTexture(bool clamp);
 
-        uint textureId = -1;
-        GLenum type;
+        uint _textureId = -1;
+        uint _type;
     };
 
     struct Texture3D {
         Texture3D() {};
-        uint textureId = -1;
+        uint _textureId = -1;
     };
 
 } // namespace texture

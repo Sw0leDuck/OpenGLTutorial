@@ -8,6 +8,6 @@ uniform sampler2D ourTexture1;
 uniform float mix_percentage;
 
 void main() {
-    // FragColor = texture(ourTexture0, texCoords);
-    FragColor = mix(texture(ourTexture0, texCoords), texture(ourTexture1, texCoords), mix_percentage);
+    FragColor = texture(ourTexture0, texCoords);
+    // FragColor = mix(texture(ourTexture0, texCoords), texture(ourTexture1, texCoords), mix_percentage);
 }

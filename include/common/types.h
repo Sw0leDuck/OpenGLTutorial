@@ -16,9 +16,25 @@ static_assert(sizeof(ull) == 8, "ull is not 8 bytes");
 typedef unsigned short ushort;
 static_assert(sizeof(ushort) == 2, "ushort is not 2 bytes");
 
-enum ProgramType : uint {
+enum class VertexIdType : uint {
     kDefault = 0,
-    kLast = kDefault
+    kTexture = 1,
+    kLightSource = 2,
+    kLast = kLightSource
+};
+
+enum class FragmentIdType : uint {
+    kDefault = 0,
+    kTexture = 1,
+    kLightSource = 2,
+    kLast = kLightSource
+};
+
+enum class ProgramType : uint {
+    kDefault = 0,
+    kTexture = 1,
+    kLightSource = 2,
+    kLast = kLightSource
 };
 
 #endif

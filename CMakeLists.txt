@@ -16,11 +16,17 @@ add_executable(OpenGLTutorial
     src/matrix.cpp
     src/Camera/camera.cpp
     src/Camera/fly_camera.cpp
+    src/Camera/fps_camera.cpp
     src/Backend/Window/glfw_window.cpp
     src/Backend/backend.cpp
     src/API/gl_backend.cpp
     src/common/error_handler.cpp
-    src/Core/game_handler.cpp)
+    src/Core/game_handler.cpp
+    src/Asset/asset.cpp
+    src/Asset/asset_manager.cpp
+    src/texture_manager.cpp
+    src/mesh_manager.cpp
+    src/renderer.cpp)
 
 target_include_directories(OpenGLTutorial PUBLIC include)
 target_include_directories(OpenGLTutorial PUBLIC third_party)

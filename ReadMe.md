@@ -71,3 +71,9 @@ cmake --build build -- install
 # Move new folder to C:/Lib
 ```
 
+# TODO
+
+- Continue to second section ( Lighting )
+- Find how to create Debug/Release build
+- Better error logs to ease the debugging process
+- Probably rewrite again 

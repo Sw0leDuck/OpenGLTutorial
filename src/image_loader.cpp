@@ -5,40 +5,40 @@
 
 namespace imageLoader {
 
-bool image::loadImage(const std::string& filePath){
-    data = stbi_load(filePath.c_str(), &width, &height, &nrChannels, 0);
-    if(!data)
+bool image::LoadImage(const std::string& filePath){
+    _data = stbi_load(filePath.c_str(), &_width, &_height, &_nrChannels, 0);
+    if(!_data)
         return false;
     return true;
 }
 
-void image::unloadImage(){
-    stbi_image_free(data);
+void image::UnloadImage(){
+    stbi_image_free(_data);
 }
 
 ImageLoaderManager::ImageLoaderManager(){
     stbi_set_flip_vertically_on_load(true);
 }
 
-void ImageLoaderManager::insertImage(const std::string& filePath, uint imageId){
-    if(image_map.find(imageId) != image_map.end()){
+void ImageLoaderManager::InsertImage(const std::string& filePath, uint imageId){
+    if(_imageMap.find(imageId) != _imageMap.end()){
         std::cerr << "ImageID already exists in image_map " << imageId << std::endl;
         std::cerr << "Image File Name " << filePath.c_str() << std::endl;
         return;
     }
-    if(!image_map[imageId].loadImage(filePath)){
+    if(!_imageMap[imageId].LoadImage(filePath)){
         std::cerr << "FilePath of image not found\n";
         return;
     }
 }
 
-void ImageLoaderManager::deleteImage(uint imageId){
-    if(image_map.find(imageId) == image_map.end()){
+void ImageLoaderManager::DeleteImage(uint imageId){
+    if(_imageMap.find(imageId) == _imageMap.end()){
         std::cerr << "Trying to delete an image that does not exist\n";
         return;
     }
-    image_map[imageId].unloadImage();
-    image_map.erase(imageId);
+    _imageMap[imageId].UnloadImage();
+    _imageMap.erase(imageId);
 }
 
 } // namespace imageLoader

@@ -14,6 +14,9 @@ namespace backend {
     void* GetWindow();
     bool IsWindowClose();
 
+    void TestLoadWorld();
+    void UpdateTestWorld(float delta_time);
+
 } // namespace backend
 
 #endif

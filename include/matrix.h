@@ -13,16 +13,18 @@ namespace graphic {
     };
 
     struct Matrix {
-        Matrix& rotate(float degree, glm::vec3 vec3);
-        Matrix& fast_rotate(float degree, glm::vec3 vec3);
-        Matrix& scale(glm::vec3 vec3);
-        Matrix& translate(glm::vec3 vec3);
-        Matrix& perspective(float fov, float aspect, float near, float far);
+        Matrix();
 
-        inline void reset() { matrix = glm::mat4(1.0f); };
+        Matrix& Rotate(float degree, glm::vec3 vec3);
+        Matrix& FastRotate(float degree, glm::vec3 vec3);
+        Matrix& Scale(glm::vec3 vec3);
+        Matrix& Translate(glm::vec3 vec3);
+        Matrix& Perspective(float fov, float aspect, float near, float far);
 
-        MatrixType type;
-        glm::mat4 matrix;
+        inline void Reset() { _matrix = glm::mat4(1.0f); };
+
+        MatrixType _type;
+        glm::mat4 _matrix;
     };
 
     

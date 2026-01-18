@@ -7,46 +7,50 @@ imageLoader::ImageLoaderManager g_image_manager;
 
 namespace graphic {
 
-    void Texture2D::exit() {
-        if(textureId != -1)
-            glDeleteTextures(1, &textureId);
+    void Texture2D::Exit() {
+        if(_textureId != -1)
+            glDeleteTextures(1, &_textureId);
     }
 
-    void Texture2D::init(const std::string& filePath, GLenum type){
-        glGenTextures(1, &textureId);
-        g_image_manager.insertImage(filePath, textureId);
-        this->type = type;
+    void Texture2D::Init(const std::string& filePath, GLenum type){
+        glGenTextures(1, &_textureId);
+        g_image_manager.InsertImage(filePath, _textureId);
+        this->_type = type;
     }
 
-    void Texture2D::loadTexture(bool clamp) {
-        glBindTexture(GL_TEXTURE_2D, textureId);
+    void Texture2D::BindTexture(){
+        glBindTexture(GL_TEXTURE_2D, _textureId);
+    }
+
+    void Texture2D::LoadTexture(bool clamp) {
+        glBindTexture(GL_TEXTURE_2D, _textureId);
 
         if(!clamp){
-            glTextureParameteri(textureId, GL_TEXTURE_WRAP_S, GL_REPEAT);
-            glTextureParameteri(textureId, GL_TEXTURE_WRAP_T, GL_REPEAT);
-            glTextureParameteri(textureId, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-            glTextureParameteri(textureId, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+            glTextureParameteri(_textureId, GL_TEXTURE_WRAP_S, GL_REPEAT);
+            glTextureParameteri(_textureId, GL_TEXTURE_WRAP_T, GL_REPEAT);
+            glTextureParameteri(_textureId, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+            glTextureParameteri(_textureId, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
         }else{
-            glTextureParameteri(textureId, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-            glTextureParameteri(textureId, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-            glTextureParameteri(textureId, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-            glTextureParameteri(textureId, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+            glTextureParameteri(_textureId, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+            glTextureParameteri(_textureId, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+            glTextureParameteri(_textureId, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+            glTextureParameteri(_textureId, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
         }
 
         glTexImage2D(
             GL_TEXTURE_2D,
             0,
-            type,
-            g_image_manager.image_map[textureId].width,
-            g_image_manager.image_map[textureId].height,
+            _type,
+            g_image_manager._imageMap[_textureId]._width,
+            g_image_manager._imageMap[_textureId]._height,
             0,
-            type,
+            _type,
             GL_UNSIGNED_BYTE,
-            g_image_manager.image_map[textureId].data
+            g_image_manager._imageMap[_textureId]._data
         );
         glGenerateMipmap(GL_TEXTURE_2D);
 
-        g_image_manager.image_map[textureId].unloadImage();
+        g_image_manager._imageMap[_textureId].UnloadImage();
     }
 
     

@@ -7,21 +7,21 @@
 namespace imageLoader {
 
     struct image {
-        ubyte* data;
-        int width;
-        int height;
-        int nrChannels;
+        ubyte* _data;
+        int _width;
+        int _height;
+        int _nrChannels;
 
-        bool loadImage(const std::string& filePath);
-        void unloadImage();
+        bool LoadImage(const std::string& filePath);
+        void UnloadImage();
     };
 
     struct ImageLoaderManager {
         ImageLoaderManager();
 
-        void insertImage(const std::string& filePath, uint imageId);
-        void deleteImage(uint imageId);
-        std::map<uint, image> image_map;
+        void InsertImage(const std::string& filePath, uint imageId);
+        void DeleteImage(uint imageId);
+        std::map<uint, image> _imageMap;
     };
 
 } // namespace imageLoader

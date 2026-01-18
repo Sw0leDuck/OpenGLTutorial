@@ -4,47 +4,87 @@
 #include "glsl_compiler.h"
 #include "common/types.h"
 #include "matrix.h"
-#include "texture.h"
 
 
 namespace graphic {
+    enum class VertexAttribute : uint {
+        kPos = 1 << 0,
+        kTextCoords = 1 << 1,
+        kNormalVector = 1 << 2,
+        kLast = kNormalVector,
+        kAll = kPos | kTextCoords | kNormalVector
+    };
+
     struct Mesh3D {
-        uint vao = -1; // vertex array ( contains a state of vertices, elementes, attrib etc )
-        uint vbo = -1; // buffer ( contain vertices )
-        uint ebo = -1; // element buffer
+        struct Material {
+            glm::vec3 _ambient;
+            glm::vec3 _diffuse;
+            glm::vec3 _specular;
+            float _shininess;
+        };
 
-        uint count;
+        struct Light {
+            glm::vec3 _lightPosition;
 
-        std::vector<glm::vec3> pts;
-        std::vector<glm::vec3> colors;
-        std::vector<uint> indices;
-        std::vector<glm::vec3> texCoords;
+            glm::vec3 _ambient;
+            glm::vec3 _diffuse;
+            glm::vec3 _specular;
+        };
 
-        Matrix model_matrice = {};
-        Matrix view_matrice = {};
-        Matrix projection_matrice = {};
+        Material _material;
+        Light _light;
 
-        std::vector<Texture2D> textures_2D;
-        std::vector<Texture3D> textures_3D;
+        uint _vao = -1; // vertex array ( contains a state of vertices, elementes, attrib etc )
+        uint _vbo = -1; // buffer ( contain vertices )
+        uint _ebo = -1; // element buffer
+
+        uint _count;
+        compiler::Program* _program; // TODO: fix this raw ptr
+
+        std::vector<glm::vec3> _pts;
+        std::vector<glm::vec3> _colors;
+        std::vector<uint> _indices;
+        std::vector<glm::vec3> _texCoords;
+
+        glm::vec3 _cameraPosition;
+        glm::vec3 _lightPositions;
+        glm::vec3 _objectColor;
+
+        Matrix _modelMatrice = {};
+        Matrix _modelInverseTransposeMatrice = {};
+        Matrix _viewMatrice = {};
+        Matrix _projectionMatrice = {};
+
+        std::vector<std::pair<uint,uint>> _textures2DId;
+        std::vector<uint> _textures3DId;
 
         ~Mesh3D();
     
-        void init();
-        void exit();
-        void load2DTexture(const std::string& filePath, GLenum type);
-        void load2DTriangle_VBO(const float* vert, uint vert_size);
-        void loadCube_TexCoords(const float* vert, uint vert_size, uint stride);
-        void load2DTriangle_VBO_Rainbow(const float* vert, uint vert_size);
-        void load2DRectangle_EBO(const float* vert, uint vert_size, const uint* index, uint index_size);
-        void load2DRectangle_2DImage(const float* vert, uint vert_size, const uint* index, uint index_size, uint stride);
-        void drawIndex(compiler::Program program);
-        void drawArray(compiler::Program program);
-        void draw10Cubes(compiler::Program program, float time = 0);
-        void draw2DRectangle_EBO();
-        void draw2DTriangle_VBO();
-        void draw2DTriangle_VBO_uniform(uint programId);
-        void draw2DRectangle_2DImage();
-        void resetMatrices();
+        void Init();
+        void Exit();
+
+        void LoadCube(uint vertexAttributeFlags);
+        void LoadTriangle();
+
+        void DrawIndex();
+        void DrawArray();
+
+        void LoadTextures();
+        void LoadDefaultUniforms();
+        void LoadMatrixUniforms();
+        
+        void Load2DTriangle_VBO(const float* vert, uint vertSize);
+        void LoadCube_TexCoords(const float* vert, uint vertSize, uint stride);
+        void LoadCube(const float* vert, uint vertSize, uint stride, uint vertexAttributeFlags);
+        void Load2DTriangle_VBO_Rainbow(const float* vert, uint vertSize);
+        void Load2DRectangle_EBO(const float* vert, uint vertSize, const uint* index, uint indexSize);
+        void Load2DRectangle_2DImage(const float* vert, uint vertSize, const uint* index, uint indexSize, uint stride);
+        void Draw10Cubes();
+        void Draw2DRectangle_EBO();
+        void Draw2DTriangle_VBO();
+        void Draw2DTriangle_VBO_uniform(uint programId);
+        void Draw2DRectangle_2DImage();
+        void ResetMatrices();
     };
 }
 
