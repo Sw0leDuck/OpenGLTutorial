@@ -13,7 +13,7 @@ namespace asset::manager {
     bool Init();
     bool Exit();
     void DrawMesh();
-    void UpdateMesh(glm::mat4 viewMatrix, glm::mat4 projectionMatrix, glm::vec3 cameraPosition);
+    void UpdateMesh(glm::mat4 viewMatrix, glm::mat4 projectionMatrix, glm::vec3 cameraPosition, glm::vec3 cameraDirection);
 
     compiler::Program* GetProgram(uint id);
 

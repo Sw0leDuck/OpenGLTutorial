@@ -25,6 +25,7 @@ namespace graphic {
 
         struct Light {
             glm::vec3 _lightPosition;
+            glm::vec3 _lightDirection;
 
             glm::vec3 _ambient;
             glm::vec3 _diffuse;
@@ -33,6 +34,7 @@ namespace graphic {
 
         Material _material;
         Light _light;
+        glm::vec3 _pointLightPositions[4];
 
         uint _vao = -1; // vertex array ( contains a state of vertices, elementes, attrib etc )
         uint _vbo = -1; // buffer ( contain vertices )

@@ -14,6 +14,7 @@ namespace gameHandler {
     void updateScreenSize(uint width, uint height);
 
     glm::vec3 GetCameraPosition();
+    glm::vec3 GetCameraDirection();
 
     glm::mat4 getViewMatrix();
     glm::mat4 getProjectionMatrix();

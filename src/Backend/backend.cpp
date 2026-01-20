@@ -92,17 +92,19 @@ float delta_time = 0;
         //     asset::manager::Load2DTexture("../../../assets/container2-emission-map.png", GL_RGBA));
         meshCube.LoadCube(uint(graphic::VertexAttribute::kAll));
 
-        auto& meshLight = asset::manager::LoadLightSourceTest();
-        meshLight._program = asset::manager::GetProgram((uint)ProgramType::kLightSource);
-        meshLight.LoadCube(uint(graphic::VertexAttribute::kPos));
-        meshLight._program->UseProgram();
-        meshLight._program->SetFloat3("lightColor",  lightColor.r, lightColor.g, lightColor.b);
+        for(uint i=0; i<4; i++){
+            auto& meshLight = asset::manager::LoadLightSourceTest();
+            meshLight._program = asset::manager::GetProgram((uint)ProgramType::kLightSource);
+            meshLight.LoadCube(uint(graphic::VertexAttribute::kPos));
+            meshLight._objectColor = lightColor;
+        }
     }
 
     void UpdateTestWorld(float delta_time){
         auto viewMatrix = gameHandler::getViewMatrix();
         auto projectionMatrix = gameHandler::getProjectionMatrix();
         auto cameraPosition = gameHandler::GetCameraPosition();
-        asset::manager::UpdateMesh(viewMatrix, projectionMatrix, cameraPosition);
+        auto cameraDirection = gameHandler::GetCameraDirection();
+        asset::manager::UpdateMesh(viewMatrix, projectionMatrix, cameraPosition, cameraDirection);
     }
 } // namespace backend

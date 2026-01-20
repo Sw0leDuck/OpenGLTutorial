@@ -58,7 +58,7 @@ namespace view {
     }
 
     glm::mat4 Camera::LookAt(){
-
+        void(0);
     }
 
 } // namespace view

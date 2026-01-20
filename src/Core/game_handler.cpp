@@ -46,4 +46,8 @@ glm::vec3 GetCameraPosition(){
     return g_game._playerCamera._position;
 }
 
+glm::vec3 GetCameraDirection(){
+    return g_game._playerCamera._cameraFront;
+}
+
 } // gameHandler
