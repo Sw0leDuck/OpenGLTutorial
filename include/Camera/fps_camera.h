@@ -3,7 +3,7 @@
 
 #include "camera.h"
 
-namespace view {
+namespace tartarus {
     struct FPSCamera : Camera {
         FPSCamera();
 

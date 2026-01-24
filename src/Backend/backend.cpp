@@ -1,110 +1,98 @@
-#include "Backend/backend.h"
-#include "API/gl_backend.h"
-#include "Backend/Window/glfw_window.h"
-#include "Core/game_handler.h"
-#include "common/error_handler.h"
-#include "Asset/asset_manager.h"
-#include "renderer.h"
+#include "Backend/Backend.h"
+#include "API/OpenGL_Backend.h"
+#include "Backend/Window/PrimaryWindow.h"
+#include "assert.h"
 
-namespace backend {
+#define OPEN_GL_CONTEXT
+
+namespace tartarus {
 
 float last_frame = 0;
 float current_frame = 0;
 float delta_time = 0;
 
-    bool Init(){
-        if(!glfw::InitializeGLFW()){
-            errorHandler::PrintError();
-            return false;
-        }
-
-        if(!gl::InitializeGL()){
-            errorHandler::PrintError();
-            return false;
-        }
-
-        if(!asset::manager::Init()){
-            errorHandler::PrintError();
-            return false;
-        }
-
-        if(!gameHandler::Init()){
-            errorHandler::PrintError();
-            return false;
-        }
-
-        if(!glfw::PostInitGameHandler()){
-            errorHandler::PrintError();
-            return false;
-        }
-
-        return true;
+bool Backend::Init(){
+    // this is passed so that the _windowManager can callback to this function
+    if(!_windowManager.Init("Tartarus")){
+        return false;
     }
 
-    bool Exit(){
-        glfw::ExitGLFW();
-        asset::manager::Exit();
-
-        return true;
+#ifdef OPEN_GL_CONTEXT
+    _gpu = std::make_unique<OpenGL>();
+#elif VULKAN_CONTEXT
+    void(0); // void for now
+#endif
+    assert(_gpu != nullptr);
+    if(!_gpu->Init()){
+        return false;
     }
 
-    void BeginFrame(){
-        current_frame = glfwGetTime();
-        delta_time = current_frame - last_frame;
-        last_frame = current_frame;
+    return true;
+}
 
-        backend::glfw::BeginFrame(delta_time);
-    }
+bool Backend::Exit(){
+    glfw::ExitGLFW();
+    _gpu->Exit();
+    _gpu.reset();
+    // asset::manager::Exit();
+    return true;
+}
 
-    void UpdateFrame(){
-        gl::ClearScreen();
-        UpdateTestWorld(delta_time);
-        renderer::UpdateFrame();
-    }
+void Backend::BeginFrame(){
+    current_frame = glfwGetTime();
+    delta_time = current_frame - last_frame;
+    last_frame = current_frame;
+    glfw::BeginFrame(delta_time);
+}
 
-    void EndFrame(){
-        /* Swap front and back buffers */
-        /* Poll for and process events */
-        glfw::EndFrame();
-    }
+void Backend::UpdateFrame(){
+    _gpu->ClearScreen();
+    UpdateTestWorld(delta_time);
+    // renderer::UpdateFrame();
+}
 
-    void* GetWindow(){
-        return glfw::GetWindow();
-    }
+void Backend::EndFrame(){
+    /* Swap front and back buffers */
+    /* Poll for and process events */
+    glfw::EndFrame();
+}
 
-    bool IsWindowClose(){
-        return glfw::IsWindowClose();
-    }
+void* Backend::GetWindow(){
+    return glfw::GetWindow();
+}
 
-    void TestLoadWorld(){
-        const glm::vec3 lightColor(1.0, 1.0, 1.f);
+bool Backend::IsWindowClose(){
+    return glfw::IsWindowClose();
+}
 
-        // loads only one cube into the world
-        auto& meshCube = asset::manager::LoadTestMesh();
-        meshCube._program = asset::manager::GetProgram((uint)ProgramType::kDefault);
-        meshCube._program->UseProgram();
-        meshCube._program->SetFloat3("viewPos", gameHandler::GetCameraPosition());
-        meshCube._textures2DId.emplace_back(
-            asset::manager::Load2DTexture("../../../assets/container2.png", GL_RGBA));
-        meshCube._textures2DId.emplace_back(
-            asset::manager::Load2DTexture("../../../assets/container2-specular.png", GL_RGBA));
-        // meshCube._textures2DId.emplace_back(
-        //     asset::manager::Load2DTexture("../../../assets/container2-emission-map.png", GL_RGBA));
-        meshCube.LoadCube(uint(graphic::VertexAttribute::kAll));
+// void Backend::TestLoadWorld(){
+//     const glm::vec3 lightColor(1.0, 1.0, 1.f);
+//     // loads only one cube into the world
+//     auto& meshCube = asset::manager::LoadTestMesh();
+//     meshCube._program = asset::manager::GetProgram((uint)ProgramType::kDefault);
+//     meshCube._program->UseProgram();
+//     meshCube._program->SetFloat3("viewPos", gameHandler::GetCameraPosition());
+//     meshCube._textures2DId.emplace_back(
+//         asset::manager::Load2DTexture("../../assets/container2.png", GL_RGBA));
+//     meshCube._textures2DId.emplace_back(
+//         asset::manager::Load2DTexture("../../assets/container2-specular.png", GL_RGBA));
+//     // meshCube._textures2DId.emplace_back(
+//     //     asset::manager::Load2DTexture("../../../assets/container2-emission-map.png", GL_RGBA));
+//     meshCube.LoadCube(uint(graphic::VertexAttribute::kAll));
+//     for(uint i=0; i<4; i++){
+//         auto& meshLight = asset::manager::LoadLightSourceTest();
+//         meshLight._program = asset::manager::GetProgram((uint)ProgramType::kLightSource);
+//         meshLight.LoadCube(uint(graphic::VertexAttribute::kPos));
+//         meshLight._objectColor = lightColor;
+//     }
+// }
 
-        for(uint i=0; i<4; i++){
-            auto& meshLight = asset::manager::LoadLightSourceTest();
-            meshLight._program = asset::manager::GetProgram((uint)ProgramType::kLightSource);
-            meshLight.LoadCube(uint(graphic::VertexAttribute::kPos));
-            meshLight._objectColor = lightColor;
-        }
-    }
+// void Backend::UpdateTestWorld(float delta_time){
+//     auto viewMatrix = gameHandler::getViewMatrix();
+//     auto projectionMatrix = gameHandler::getProjectionMatrix();
+//     auto cameraPosition = gameHandler::GetCameraPosition();
+//     auto cameraDirection = gameHandler::GetCameraDirection();
+//     asset::manager::UpdateMesh(viewMatrix, projectionMatrix, cameraPosition, cameraDirection);
+// }
 
-    void UpdateTestWorld(float delta_time){
-        auto viewMatrix = gameHandler::getViewMatrix();
-        auto projectionMatrix = gameHandler::getProjectionMatrix();
-        auto cameraPosition = gameHandler::GetCameraPosition();
-        auto cameraDirection = gameHandler::GetCameraDirection();
-        asset::manager::UpdateMesh(viewMatrix, projectionMatrix, cameraPosition, cameraDirection);
-    }
 } // namespace backend

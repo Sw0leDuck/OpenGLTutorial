@@ -3,12 +3,12 @@
 
 #include <vector>
 #include "asset.h"
-#include "common/types.h"
+#include "Common/types.h"
 #include "texture_manager.h"
 #include "mesh_manager.h"
 
 
-namespace asset::manager {
+namespace tartarus {
 
     bool Init();
     bool Exit();

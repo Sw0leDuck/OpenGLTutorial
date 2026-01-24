@@ -2,11 +2,18 @@
 #define WINDOW_H
 
 #include <GLFW/glfw3.h>
-#include "common/types.h"
+#include "Common/types.h"
 
-namespace backend::glfw {
-#define WIDTH 1280
-#define HEIGHT 720
+namespace tartarus::glfw {
+
+    struct Window {
+        bool Init(uint height, uint width, const char* label);
+        bool Exit();
+
+        GLFWwindow* _window;
+        uint _height;
+        uint _width;
+    };
 
     bool InitializeGLFW();
     bool PostInitGameHandler();
@@ -20,27 +27,7 @@ namespace backend::glfw {
     void BeginFrame(float delta_time);
     void EndFrame();
 
-    struct WindowManager {
-        bool Init(
-            const char* label,
-            uint width = WIDTH,
-            uint heigth = HEIGHT);
 
-        bool Exit();
-
-        inline bool Closed() { return glfwWindowShouldClose(_window); }
-        inline void SwapBuffers() { glfwSwapBuffers(_window); }
-        inline void PollEvents() { glfwPollEvents(); }
-
-        void ProcessInput(float delta_time);
-
-        GLFWwindow* _window;
-        uint _width;
-        uint _height;
-
-        float _lastXPos;
-        float _lastYPos;
-    };
     
     void FramebufferSizeCallback(GLFWwindow* window, int width, int height);
     void MouseCallback(GLFWwindow* window, double xposIn, double yposIn);

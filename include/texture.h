@@ -1,9 +1,9 @@
 #ifndef TEXTURE_H
 #define TEXTURE_H
 #include <string>
-#include "common/types.h"
+#include "Common/types.h"
 
-namespace graphic {
+namespace tartarus {
 
 #define GL_TEXTURE_2D 0x0DE1 // TODO: change this
 

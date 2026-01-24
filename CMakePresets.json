@@ -2,18 +2,30 @@
     "version": 8,
     "configurePresets": [
         {
-            "name": "OpenGLTutorial",
-            "displayName": "OpenGLTutorial",
-            "description": "Good luck to me :D",
+            "name": "debug",
+            "displayName": "Debug",
+            "description": "May lady luck shine upon me",
             "generator": "MinGW Makefiles",
-            "binaryDir": "${sourceDir}/out/build/${presetName}",
+            "binaryDir": "${sourceDir}/out/${presetName}",
             "cacheVariables": {
-                "CMAKE_INSTALL_PREFIX": "${sourceDir}/out/install/${presetName}",
                 "CMAKE_PREFIX_PATH": "C:/Lib",
                 "CMAKE_C_COMPILER": "C:/mingw64/bin/gcc.exe",
                 "CMAKE_CXX_COMPILER": "C:/mingw64/bin/g++.exe",
                 "CMAKE_BUILD_TYPE": "Debug",
                 "CMAKE_EXPORT_COMPILE_COMMANDS": "YES"
+            }
+        },
+        {
+            "name": "release",
+            "displayName": "Release",
+            "description": "Tis done",
+            "generator": "MinGW Makefiles",
+            "binaryDir": "${sourceDir}/out/${presetName}",
+            "cacheVariables": {
+                "CMAKE_PREFIX_PATH": "C:/Lib",
+                "CMAKE_C_COMPILER": "C:/mingw64/bin/gcc.exe",
+                "CMAKE_CXX_COMPILER": "C:/mingw64/bin/g++.exe",
+                "CMAKE_BUILD_TYPE": "Release"
             }
         }
     ]

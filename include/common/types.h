@@ -1,6 +1,8 @@
 #ifndef TYPES_H
 #define TYPES_H
 
+namespace tartarus {
+
 typedef unsigned uint;
 static_assert(sizeof(uint) == 4, "uint is not 4 bytes");
 
@@ -36,5 +38,7 @@ enum class ProgramType : uint {
     kLightSource = 2,
     kLast = kLightSource
 };
+
+}
 
 #endif

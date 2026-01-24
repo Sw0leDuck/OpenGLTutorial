@@ -91,17 +91,17 @@ void UpdateMesh(glm::mat4 viewMatrix, glm::mat4 projectionMatrix, glm::vec3 came
 bool AssetManager::Init(){
     compiler::Init();
 
-    if(!compiler::CompileShader("../../../shaders/default.vert",
+    if(!compiler::CompileShader("../../shaders/default.vert",
             GL_VERTEX_SHADER, 
             (uint)VertexIdType::kDefault))
         return false;
         
-    if(!compiler::CompileShader("../../../shaders/default.frag",
+    if(!compiler::CompileShader("../../shaders/default.frag",
             GL_FRAGMENT_SHADER, 
             (uint)FragmentIdType::kDefault))
         return false;
 
-    if(!compiler::CompileShader("../../../shaders/light_source.frag", 
+    if(!compiler::CompileShader("../../shaders/light_source.frag", 
             GL_FRAGMENT_SHADER,
             (uint)FragmentIdType::kLightSource))
         return false;

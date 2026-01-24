@@ -1,7 +1,7 @@
 #ifndef ASSET_H
 #define ASSET_H
 
-namespace asset {
+namespace tartarus {
 
     struct Asset {
         bool Init();

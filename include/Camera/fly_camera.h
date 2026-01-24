@@ -4,7 +4,7 @@
 #include "camera.h"
 
 
-namespace view {
+namespace tartarus {
 
     struct FlyCamera : public Camera {
         FlyCamera();

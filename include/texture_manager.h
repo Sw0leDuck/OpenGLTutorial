@@ -4,7 +4,7 @@
 #include <map>
 #include "texture.h"
 
-namespace texture::manager {
+namespace tartarus {
 
     struct TextureManager {
         bool Init();

@@ -2,9 +2,9 @@
 #define CAMERA_H
 
 #include "glm/gtc/type_ptr.hpp"
-#include "common/types.h"
+#include "Common/types.h"
 
-namespace view {
+namespace tartarus {
 
 #define YAW        -90.f
 #define PITCH        0.f
