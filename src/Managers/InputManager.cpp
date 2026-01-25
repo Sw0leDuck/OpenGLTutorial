@@ -1,3 +1,4 @@
+#include "Common/Logging.h"
 #include "Managers/InputManager.h"
 #include "assert.h"
 
@@ -21,15 +22,28 @@ bool InputManager::Exit(){
 }
 
 void InputManager::UpdateKeyboardInput(int key, int scanCode, int action, int mods){
+    LOG(INFO, "Pressed key %d", key);
+    for(auto& iter : _keys){
+        if(iter.keycode == key && action == GLFW_PRESS)
+            iter.keyPressed = true;
+        else
+            iter.keyPressed = false;
 
+        if(iter.keyPressed && !iter.previousPressState)
+            iter.keyHold = true;
+        else
+            iter.keyHold = false;
+        
+        iter.previousPressState = iter.keyPressed;
+    }
 }
 
 void InputManager::UpdateMouseCallback(float xPosIn, float yPosIn){
-
+    void(0);
 }
 
 void InputManager::UpdateMouseScrollback(float xOffset, float yOffset){
-
+    void(0);
 }
 
 

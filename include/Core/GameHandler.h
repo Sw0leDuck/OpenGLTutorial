@@ -1,23 +1,18 @@
 #ifndef GAME_HANDLER_H
 #define GAME_HANDLER_H
+#include "Managers/WindowManager.h"
 #include "Core/Simulation.h"
 
 namespace tartarus {
 
-    enum gameState {
-        kLoading = 0,
-        kReady = 0,
-        kExit
-    };
-
     struct GameHandler {
-        bool Init(void*);
+        bool Init(void*, void*, void*);
         bool Exit();
 
         void GameLoop();
 
         Simulation _simulation;
-        gameState _state;
+        WindowManager* _windowManager;
     };
 
 } // namespace gameHandler

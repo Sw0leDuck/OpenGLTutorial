@@ -1,6 +1,6 @@
 #ifndef WINDOW_H
 #define WINDOW_H
-
+#include "glad/glad.h"
 #include <GLFW/glfw3.h>
 #include "Common/types.h"
 
@@ -10,29 +10,31 @@ namespace tartarus::glfw {
         bool Init(uint height, uint width, const char* label);
         bool Exit();
 
+        void EndFrameWork();
+
         GLFWwindow* _window;
         uint _height;
         uint _width;
     };
 
-    bool InitializeGLFW();
-    bool PostInitGameHandler();
-    bool ExitGLFW();
+    // bool InitializeGLFW();
+    // bool PostInitGameHandler();
+    // bool ExitGLFW();
 
-    // Window methods
-    void* GetWindow();
-    bool IsWindowClose();
+    // // Window methods
+    // void* GetWindow();
+    // bool IsWindowClose();
 
-    // TOOD: change this
-    void BeginFrame(float delta_time);
-    void EndFrame();
+    // // TOOD: change this
+    // void BeginFrame(float delta_time);
+    // void EndFrame();
 
 
     
-    void FramebufferSizeCallback(GLFWwindow* window, int width, int height);
-    void MouseCallback(GLFWwindow* window, double xposIn, double yposIn);
-    void MouseScrollBack(GLFWwindow* window, double xOffset, double yOffset);
-    void KeyCallback(GLFWwindow* window, int key, int scanCode, int action, int mods);
+    // void FramebufferSizeCallback(GLFWwindow* window, int width, int height);
+    // void MouseCallback(GLFWwindow* window, double xposIn, double yposIn);
+    // void MouseScrollBack(GLFWwindow* window, double xOffset, double yOffset);
+    // void KeyCallback(GLFWwindow* window, int key, int scanCode, int action, int mods);
 } // namespace backend::glfw
 
 #endif

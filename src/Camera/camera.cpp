@@ -1,7 +1,7 @@
-#include "camera/camera.h"
+#include "Camera/Camera.h"
 #include "common/algorithm.h"
 
-namespace view {
+namespace tartarus {
 
     void Camera::Init(glm::vec3 position,
             float yaw,
@@ -10,6 +10,8 @@ namespace view {
             float camera_speed,
             float camera_sensitivity,
             float camera_fov) {
+        _type = GameObject::Type::kCamera;
+        
         _position = position;
         _upVector = glm::vec3(0.f, 1.f, 0.f);
         _cameraFront = glm::vec3(0.f, 0.f, -1.f);
@@ -33,8 +35,9 @@ namespace view {
         _roll = roll;
     }
 
-    void Camera::Exit(){
+    bool Camera::Exit(){
         // TODO:: does it need anything?
+        return true;
     }
 
     void Camera::ProcessMouseMovement(float xOffset, float yOffset){

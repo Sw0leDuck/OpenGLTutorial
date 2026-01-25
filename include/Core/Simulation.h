@@ -1,7 +1,7 @@
 #ifndef SIMULATION_H
 #define SIMULATION_H
 #include "API/Gpu_Backend.h"
-#include "Managers/InputManager.h"
+#include "Core/MovementHandler.h"
 #include "Core/Scene.h"
 
 namespace tartarus{
@@ -10,6 +10,7 @@ struct Simulation{
     bool Init(void*, void*);
     bool Exit();
 
+    bool Run();
     void BeginFrame(float delta);
     void UpdateFrame(float delta);
     void ExitFrame(float delta);
@@ -18,7 +19,7 @@ struct Simulation{
 
     Gpu* _gpu;
     Scene* _currentScene;
-    InputManager* _inputManager;
+    MovementHandler _movementHandler;
 };
 
 }

@@ -4,7 +4,6 @@
 #include "Core/GameHandler.h"
 #include "Backend/Backend.h"
 #include "Managers/SceneManager.h"
-#include "Managers/ShaderManager.h"
 
 namespace tartarus {
 
@@ -16,7 +15,6 @@ struct Realm {
 
 
     Backend _backend;
-    ShaderManager _shaderManager;
     std::vector<SceneManager> _scnManagers;
     GameHandler _gameHandler;
 };

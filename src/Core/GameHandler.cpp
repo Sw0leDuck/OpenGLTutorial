@@ -1,14 +1,15 @@
+#include "Common/Logging.h"
 #include "Core/GameHandler.h"
 
 namespace tartarus {
 
-bool GameHandler::Init(void* gpu_ptr){
-    _state = gameState::kLoading;
+bool GameHandler::Init(void* gpu_ptr, void* moveHandler, void* windowManager_ptr){
 
-    if(!_simulation.Init(gpu_ptr))
+    if(!_simulation.Init(gpu_ptr, moveHandler))
         return false;
 
-    _state = gameState::kReady;
+    _windowManager = static_cast<WindowManager*>(windowManager_ptr);
+
     return true;
 }
 
@@ -19,7 +20,12 @@ bool GameHandler::Exit(){
 void GameHandler::GameLoop(){
     float delta = 0;
 
-    while(_state != gameState::kExit){
+    while(_simulation.Run()){
+        if(_windowManager->needResizeViewport)
+            _simulation._gpu->UpdateViewPort(
+                _windowManager->_width, 
+                _windowManager->_height);
+
         // handle input
         _simulation.BeginFrame(delta);
         
@@ -27,8 +33,10 @@ void GameHandler::GameLoop(){
         // simulate
         _simulation.UpdateFrame(delta);
         
-        // swap buffers
+        // clean resources or somethings else
         _simulation.ExitFrame(delta);
+
+        _windowManager->_mainWindow->EndFrameWork();
     }
 }
 

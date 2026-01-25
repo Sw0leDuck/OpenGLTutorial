@@ -1,3 +1,4 @@
+#include "Common/Logging.h"
 #include "Managers/WindowManager.h"
 
 namespace tartarus {
@@ -10,9 +11,19 @@ WindowManager* g_WindowManager;
 
 
 bool WindowManager::Init(const char* label, uint width, uint height){
+    if (!glfwInit()){
+        return false;
+    }
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    
     if(!_TartarusWindow.Init(height, width, label)){
         return false;
     }
+    
+    // glfwSetErrorCallback(GetGLFWError);
+    // glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT , GL_TRUE);
 
     _inputManager.Init(_TartarusWindow._window);
 
@@ -23,10 +34,14 @@ bool WindowManager::Init(const char* label, uint width, uint height){
     glfwSetScrollCallback(_TartarusWindow._window, MouseScrollBack);
     glfwSetKeyCallback(_TartarusWindow._window, KeyCallback);
 
+    _mainWindow = &_TartarusWindow;
+    needResizeViewport = false;
+
     return true;
 }
 
 bool WindowManager::Exit(){
+    _mainWindow = nullptr;
     if(!_TartarusWindow.Exit())
         return false;
     return true;
@@ -54,13 +69,17 @@ void WindowManager::ProcessInput(float delta_time) {
     // }
 }
 
+void GetGLFWError(int error_code, const char* description){
+    LOG(FATAL, "Error code: %d - %s", error_code, description);
+}
+
 void FramebufferSizeCallback(GLFWwindow* window, int width, int height){
     global::g_WindowManager->_height =
         global::g_WindowManager->_TartarusWindow._height = height;
     global::g_WindowManager->_width =
         global::g_WindowManager->_TartarusWindow._width = width;
     
-    glViewport(0, 0, width, height);
+    global::g_WindowManager->needResizeViewport = true;
 }
 
 void MouseCallback(GLFWwindow* window, double xposIn, double yposIn){

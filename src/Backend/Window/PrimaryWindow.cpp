@@ -1,3 +1,4 @@
+#include "Common/Logging.h"
 #include "Backend/Window/PrimaryWindow.h"
 
 
@@ -7,14 +8,8 @@ bool Window::Init(uint height, uint width, const char* label) {
     _height = height;
     _width = width;
 
-    if (!glfwInit()){
-        return false;
-    }
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
     _window = glfwCreateWindow(_width, _height, label, NULL, NULL);
+
 
     if (!_window) {
         glfwTerminate();
@@ -23,7 +18,7 @@ bool Window::Init(uint height, uint width, const char* label) {
 
     glfwMakeContextCurrent(_window);
     glfwSwapInterval(1);
-    glfwSetInputMode(_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    // glfwSetInputMode(_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
     return true;
 }
@@ -31,6 +26,11 @@ bool Window::Init(uint height, uint width, const char* label) {
 bool Window::Exit(){
     glfwTerminate();
     return true;
+}
+
+void Window::EndFrameWork(){
+    glfwSwapBuffers(_window);
+    glfwPollEvents();
 }
 
 // void BeginFrame(float delta_time){

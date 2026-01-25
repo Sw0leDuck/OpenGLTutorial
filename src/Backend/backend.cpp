@@ -1,7 +1,6 @@
 #include "Backend/Backend.h"
-#include "API/OpenGL_Backend.h"
-#include "Backend/Window/PrimaryWindow.h"
-#include "assert.h"
+#include "API/OpenGL/GLBackend.h"
+
 
 #define OPEN_GL_CONTEXT
 
@@ -22,7 +21,6 @@ bool Backend::Init(){
 #elif VULKAN_CONTEXT
     void(0); // void for now
 #endif
-    assert(_gpu != nullptr);
     if(!_gpu->Init()){
         return false;
     }
@@ -31,39 +29,39 @@ bool Backend::Init(){
 }
 
 bool Backend::Exit(){
-    glfw::ExitGLFW();
+    _windowManager.Exit();
     _gpu->Exit();
     _gpu.reset();
     // asset::manager::Exit();
     return true;
 }
 
-void Backend::BeginFrame(){
-    current_frame = glfwGetTime();
-    delta_time = current_frame - last_frame;
-    last_frame = current_frame;
-    glfw::BeginFrame(delta_time);
-}
+// void Backend::BeginFrame(){
+//     current_frame = glfwGetTime();
+//     delta_time = current_frame - last_frame;
+//     last_frame = current_frame;
+//     glfw::BeginFrame(delta_time);
+// }
 
-void Backend::UpdateFrame(){
-    _gpu->ClearScreen();
-    UpdateTestWorld(delta_time);
-    // renderer::UpdateFrame();
-}
+// void Backend::UpdateFrame(){
+//     _gpu->ClearScreen();
+//     UpdateTestWorld(delta_time);
+//     // renderer::UpdateFrame();
+// }
 
-void Backend::EndFrame(){
-    /* Swap front and back buffers */
-    /* Poll for and process events */
-    glfw::EndFrame();
-}
+// void Backend::EndFrame(){
+//     /* Swap front and back buffers */
+//     /* Poll for and process events */
+//     glfw::EndFrame();
+// }
 
-void* Backend::GetWindow(){
-    return glfw::GetWindow();
-}
+// void* Backend::GetWindow(){
+//     return glfw::GetWindow();
+// }
 
-bool Backend::IsWindowClose(){
-    return glfw::IsWindowClose();
-}
+// bool Backend::IsWindowClose(){
+//     return glfw::IsWindowClose();
+// }
 
 // void Backend::TestLoadWorld(){
 //     const glm::vec3 lightColor(1.0, 1.0, 1.f);

@@ -1,3 +1,6 @@
+#ifndef TARTARUS_KEYCODES_H
+#define TARTARUS_KEYCODES_H
+
 namespace tartarus {
     
     // taken from the GLFW header file
@@ -127,3 +130,5 @@ namespace tartarus {
         TARTARUS_KEY_LAST_ENTRY = TARTARUS_KEY_MENU
     };
 }
+
+#endif

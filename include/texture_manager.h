@@ -12,8 +12,8 @@ namespace tartarus {
 
         std::pair<uint, uint> Load2DTexture(const char *filePath, uint type);
 
-        std::map<uint, graphic::Texture2D> _textures2D;
-        std::map<uint, graphic::Texture3D> _textures3D;
+        std::map<uint, Texture2D> _textures2D;
+        std::map<uint, Texture3D> _textures3D;
     };
 }
 

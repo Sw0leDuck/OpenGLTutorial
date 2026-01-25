@@ -27,7 +27,7 @@ namespace tartarus {
         bool Exit();
 
         std::vector<Asset> _assets;
-        texture::manager::TextureManager _textureManager;
+        TextureManager _textureManager;
         mesh::manager::MeshManager _meshManager;
     };
 

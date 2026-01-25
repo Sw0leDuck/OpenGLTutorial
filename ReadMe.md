@@ -73,7 +73,7 @@ cmake --build build -- install
 
 # TODO
 
-- Continue to second section ( Lighting )
-- Find how to create Debug/Release build
+- ~~ Continue to second section ( Lighting )~~
+- ~~Find how to create Debug/Release build~~
 - Better error logs to ease the debugging process
 - Probably rewrite again 

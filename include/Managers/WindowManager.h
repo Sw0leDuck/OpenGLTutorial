@@ -29,13 +29,17 @@ struct WindowManager {
     void ProcessInput(float delta_time);
 
     glfw::Window _TartarusWindow;
+    glfw::Window* _mainWindow;
     InputManager _inputManager;
 
+    bool needResizeViewport;
     uint _width;
     uint _height;
     float _lastXPos;
     float _lastYPos;
 };
+
+void GetGLFWError(int error_code, const char* description);
 
 }
 

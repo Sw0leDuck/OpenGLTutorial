@@ -3,12 +3,12 @@
 
 #include <vector>
 #include "Core/Scene.h"
-#include "Camera/fly_camera.h"
+// #include "Camera/fly_camera.h"
 
 namespace tartarus {
 
     struct SceneManager{
-        FlyCamera _playerCamera;
+        // FlyCamera _playerCamera;
         std::vector<Scene> _scenes;
     };
 

@@ -23,7 +23,7 @@ struct InputManager{
         uint keycode;
         bool keyPressed = false;
         bool keyHold = false;
-        bool previousFrameState = false;
+        bool previousPressState = false;
     };
     
     GLFWwindow* _window;
