@@ -3,7 +3,7 @@
 #include <glm/gtc/type_ptr.hpp>
 #include "common/types.h"
 
-namespace graphic {
+namespace tartarus {
 
     enum MatrixType : byte{
         kIdentity = 0,

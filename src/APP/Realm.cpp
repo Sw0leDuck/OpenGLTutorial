@@ -1,6 +1,6 @@
 #include "Common/Logging.h"
 #include "App/Realm.h"
-#include "Common/types.h"
+#include "Common/Types.h"
 
 namespace tartarus {
 
@@ -19,10 +19,9 @@ bool Realm::Init(){
             static_cast<void*>(&_backend._windowManager)))
         return false;
 
-    if(!_shaderManager.Init(_backend._gpu.get()))
+    if(!_scnManagers.Init())
         return false;
 
-    _scnManagers.reserve(g_defaultSceneCount);
     return true;
 }
 
@@ -31,5 +30,13 @@ bool Realm::Exit(){
     if(!_backend.Exit())
         return false;
     return true;
+}
+
+Shader& Realm::CompileShader(const char* vert, const char* frag){
+    return _backend._gpu->CompileShader(vert, frag);
+}
+
+Scene& Realm::GetPrimaryScene(){
+    return _scnManagers.GetPrimaryScene();
 }
 } // namespace tartarus

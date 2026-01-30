@@ -8,23 +8,29 @@ find_package(glm CONFIG REQUIRED)
 add_subdirectory(C:/Lib/glad  ${CMAKE_CURRENT_BINARY_DIR}/glad_library EXCLUDE_FROM_ALL)
 
 add_executable(OpenGLTutorial 
-    src/API/OpenGL_Backend.cpp
+    src/API/OpenGL/GLBackend.cpp
+    src/API/OpenGL/GLBuffer.cpp
+    src/API/OpenGL/GLBufferManager.cpp
+    src/API/OpenGL/GLMeshBuffer.cpp
+    src/API/OpenGL/GLShaderManager.cpp
+    src/API/OpenGL/GLTexture.cpp
+    src/API/OpenGL/GLTextureManager.cpp
     src/App/main.cpp
     src/App/Realm.cpp
-    # src/Asset/asset.cpp
     # src/Asset/asset_manager.cpp
-    src/Backend/Backend.cpp
     src/Backend/Window/PrimaryWindow.cpp
-    # src/Camera/camera.cpp
-    # src/Camera/fly_camera.cpp
-    # src/Camera/fps_camera.cpp
+    src/Backend/Backend.cpp
+    src/Camera/Camera.cpp
     src/Common/Logging.cpp
+    src/Core/Objects/Static3D.cpp
     src/Core/GameHandler.cpp
-    src/Core/MovementHandler.cpp
+    src/Core/MovementStateManager.cpp
+    src/Core/Scene.cpp
+    src/Core/Shader.cpp
     src/Core/Simulation.cpp
+    src/File/File.cpp
     src/Managers/InputManager.cpp
     src/Managers/SceneManager.cpp
-    src/Managers/ShaderManager.cpp
     src/Managers/WindowManager.cpp
     # src/glsl_compiler.cpp
     # src/image_loader.cpp

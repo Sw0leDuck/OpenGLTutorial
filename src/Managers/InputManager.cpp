@@ -6,6 +6,7 @@ namespace tartarus {
 
 bool InputManager::Init(GLFWwindow* window){
     _window = window;
+    _registeredMouse = false;
     
     _keys.reserve(lastKeyCode - firstKeyCode + 1);
 
@@ -22,7 +23,6 @@ bool InputManager::Exit(){
 }
 
 void InputManager::UpdateKeyboardInput(int key, int scanCode, int action, int mods){
-    LOG(INFO, "Pressed key %d", key);
     for(auto& iter : _keys){
         if(iter.keycode == key && action == GLFW_PRESS)
             iter.keyPressed = true;
@@ -39,11 +39,20 @@ void InputManager::UpdateKeyboardInput(int key, int scanCode, int action, int mo
 }
 
 void InputManager::UpdateMouseCallback(float xPosIn, float yPosIn){
-    void(0);
+    if(!_registeredMouse){
+        _oldWindowCoords = {xPosIn, yPosIn, 0};
+        _currentWindowCoords = _oldWindowCoords;
+        _registeredMouse = true;
+        return;
+    }
+    _oldWindowCoords = _currentWindowCoords;
+    _currentWindowCoords = {xPosIn, yPosIn, 0};
 }
 
+// TODO: z should not be used here
 void InputManager::UpdateMouseScrollback(float xOffset, float yOffset){
-    void(0);
+    _oldWindowCoords.z = _currentWindowCoords.z;
+    _currentWindowCoords.z = yOffset;
 }
 
 

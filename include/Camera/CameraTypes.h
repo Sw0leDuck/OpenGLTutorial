@@ -4,10 +4,17 @@
 namespace tartarus {
 
 enum class CAMERA_MOVEMENT {
-    kMoveForward = 0,
-    kMoveBackward = 1,
-    kMoveLeft = 2,
-    kMoveRight = 3
+    kNothing = 0,
+    kMoveForward = 1,
+    kMoveBackward = 2,
+    kMoveLeft = 3,
+    kMoveRight = 4
+};
+
+struct OffsetCoordinates {
+    float xOffset;
+    float yOffset;
+    float zOffset;
 };
 
 } // namespace tartarus

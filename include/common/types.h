@@ -18,25 +18,12 @@ static_assert(sizeof(ull) == 8, "ull is not 8 bytes");
 typedef unsigned short ushort;
 static_assert(sizeof(ushort) == 2, "ushort is not 2 bytes");
 
-enum class VertexIdType : uint {
-    kDefault = 0,
-    kTexture = 1,
-    kLightSource = 2,
-    kLast = kLightSource
-};
-
-enum class FragmentIdType : uint {
-    kDefault = 0,
-    kTexture = 1,
-    kLightSource = 2,
-    kLast = kLightSource
-};
-
-enum class ProgramType : uint {
-    kDefault = 0,
-    kTexture = 1,
-    kLightSource = 2,
-    kLast = kLightSource
+// Used on passing Float3 variables to the program uniform function in
+// ShaderManager
+struct vec3 {
+    float x;
+    float y;
+    float z;
 };
 
 }

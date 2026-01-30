@@ -1,11 +1,11 @@
-#ifndef MOVEMENT_HANDLER_H
-#define MOVEMENT_HANDLER_H
+#ifndef MOVEMENT_STATE_MANAGER_H
+#define MOVEMENT_STATE_MANAGER_H
 #include "Managers/InputManager.h"
 #include "Camera/CameraTypes.h"
 
 namespace tartarus {
 
-struct MovementHandler {
+struct MovementStateManager {
     bool Init(void* inputManager_ptr);
     bool Exit();
     

@@ -1,20 +1,21 @@
 #include "Common/Logging.h"
-#include "Core/MovementHandler.h"
+#include "Core/MovementStateManager.h"
 #include "Common/TartarusKeycodes.h"
 
 namespace tartarus {
 
-bool MovementHandler::Init(void* inputManager_ptr){
+bool MovementStateManager::Init(void* inputManager_ptr){
     _inputManager = static_cast<InputManager*>(inputManager_ptr);
+    _movementState = CAMERA_MOVEMENT::kNothing;
     _stopSimulation = false;
     return true;
 }
 
-bool MovementHandler::Exit(){
+bool MovementStateManager::Exit(){
     return true;
 }
 
-void MovementHandler::BeginFrame(float delta){
+void MovementStateManager::BeginFrame(float delta){
     // currently set only the escape key, this code handles the UI stuff i would say
     // so everything needs to be moved to the UI handler
     // For now we have a pointer to the GameHandler struct to be able to change the state
@@ -23,6 +24,7 @@ void MovementHandler::BeginFrame(float delta){
         _stopSimulation = true;
     }
 
+    // Movement state important keys
     if(_inputManager->KeyPressed((uint)keycodes::TARTARUS_KEY_W)){
         _movementState = CAMERA_MOVEMENT::kMoveForward;
     }

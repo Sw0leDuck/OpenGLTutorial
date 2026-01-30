@@ -1,14 +1,23 @@
 #ifndef GL_SHADER_MANAGER_H
 #define GL_SHADER_MANAGER_H
-#include "API/ShaderManager.h"
+#include "Common/Types.h"
+#include "string"
+#include "Core/Shader.h"
+#include "vector"
 
 namespace tartarus {
 
-struct GLShaderManager : ShaderManager {
-    bool Init() override;
-    Shader& compileShader(const char* vert, const char* frag) override;
+struct ShaderLoader {
+    std::string LoadGLSLsource(const char* filePath);
+};
 
+struct GLShaderManager {
+    bool Init();
+    bool Exit();
+    Shader& CompileShader(const char* vert, const char* frag);
+    
     std::vector<Shader> _shaders;
+    ShaderLoader _loader;
 };
 
 }

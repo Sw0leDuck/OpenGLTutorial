@@ -1,15 +1,40 @@
 #ifndef SHADER_H
 #define SHADER_H
 #include "Common/types.h"
+#include "string"
 
 namespace tartarus {
 
-struct Shader {
-    uint _fragmentShaderId;
-    uint _vertexShaderId;
-    uint _programId;
+class GLShaderManager;
 
-    bool valid;
+struct Shader {
+    enum UniformType {
+        kInt = 0,
+        kFloat = 1,
+        kFloat3 = 2,
+        kMatrix = 3
+    };
+
+
+    uint _fragmentShaderId = -1;
+    uint _vertexShaderId = -1;
+    uint _programId = -1;
+
+    std::string _vertexSrc;
+    std::string _fragmentSrc;
+
+
+    void UseProgam();
+    void Reset();
+    void SetInt(const char*, uint value);
+    void SetFloat(const char*, float value);
+    void SetFloat3(const char*, float x1, float x2, float x3);
+    void SetFloat3(const char*, vec3 value);
+    void SetMatrix(const char*, float* matrix);
+
+    bool valid = false;
+
+    GLShaderManager* _manager = nullptr;
 };
 
 }

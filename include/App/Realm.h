@@ -13,9 +13,11 @@ struct Realm {
     bool Init();
     bool Exit();
 
+    Shader& CompileShader(const char* vert, const char* frag);
+    Scene& GetPrimaryScene();
 
     Backend _backend;
-    std::vector<SceneManager> _scnManagers;
+    SceneManager _scnManagers;
     GameHandler _gameHandler;
 };
 

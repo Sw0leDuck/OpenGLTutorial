@@ -1,8 +1,7 @@
-#include "Common/Logging.h"
-
 #include "App/Realm.h"
 #include "stdlib.h"
 
+#include "Core/Objects/Static3D.h"
 namespace tartarus{
 
 int main(void) {
@@ -12,6 +11,9 @@ int main(void) {
 
     if(!realm->Init())
         return -1;
+
+    // lets load the primary scene with some static cube objects
+    // auto scene = realm->GetPrimaryScene();
 
     // utilize the realm->_scnManagers variable to load the world
 

@@ -2,8 +2,7 @@
 #define CAMERA_H
 #include "glm/gtc/type_ptr.hpp"
 #include "CameraTypes.h"
-#include "Core/GameObject.h"
-#include "Common/types.h"
+#include "Core/Objects/GameObject.h"
 
 namespace tartarus {
 
@@ -18,20 +17,20 @@ namespace tartarus {
 struct Camera : GameObject {
     bool Init() override;
     bool Exit() override;
+    void Update(float) override;
     
     void Init(glm::vec3 position = glm::vec3(0),
-    float yaw = YAW,
-    float pitch = PITCH,
-    float roll = ROLL,
-    float camera_speed = SPEED,
-    float camera_sensitivity = SENSITIVITY,
-    float camera_fov = FOV);
-    virtual void ProcessMouseMovement(float xOffset, float yOffset);
-    virtual void ProcessMouseScroll(float zOffset);
-    virtual void MoveCamera(CAMERA_MOVEMENT value, float delta_time);
+        float yaw = YAW,
+        float pitch = PITCH,
+        float roll = ROLL,
+        float camera_speed = SPEED,
+        float camera_sensitivity = SENSITIVITY,
+        float camera_fov = FOV);
+    
     glm::mat4 LookAt();
     glm::mat4 CalculateViewMatrix();
     glm::mat4 CalculateProjectionMatrix();
+
     glm::vec3 _position;
     glm::vec3 _cameraTarget;
     glm::vec3 _cameraFront;
@@ -51,6 +50,9 @@ struct Camera : GameObject {
     float _yaw;
     float _pitch;
     float _roll;
+
+    OffsetCoordinates _offsets;
+    CAMERA_MOVEMENT _movement;
 };
 }
 

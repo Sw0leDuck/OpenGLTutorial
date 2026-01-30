@@ -1,12 +1,11 @@
 #ifndef MESH_H
 #define MESH_H
 
-#include "glsl_compiler.h"
 #include "common/types.h"
 #include "matrix.h"
 
 
-namespace graphic {
+namespace tartarus {
     enum class VertexAttribute : uint {
         kPos = 1 << 0,
         kTextCoords = 1 << 1,
@@ -41,7 +40,6 @@ namespace graphic {
         uint _ebo = -1; // element buffer
 
         uint _count;
-        compiler::Program* _program; // TODO: fix this raw ptr
 
         std::vector<glm::vec3> _pts;
         std::vector<glm::vec3> _colors;
@@ -75,17 +73,7 @@ namespace graphic {
         void LoadDefaultUniforms();
         void LoadMatrixUniforms();
         
-        void Load2DTriangle_VBO(const float* vert, uint vertSize);
-        void LoadCube_TexCoords(const float* vert, uint vertSize, uint stride);
-        void LoadCube(const float* vert, uint vertSize, uint stride, uint vertexAttributeFlags);
-        void Load2DTriangle_VBO_Rainbow(const float* vert, uint vertSize);
-        void Load2DRectangle_EBO(const float* vert, uint vertSize, const uint* index, uint indexSize);
-        void Load2DRectangle_2DImage(const float* vert, uint vertSize, const uint* index, uint indexSize, uint stride);
         void Draw10Cubes();
-        void Draw2DRectangle_EBO();
-        void Draw2DTriangle_VBO();
-        void Draw2DTriangle_VBO_uniform(uint programId);
-        void Draw2DRectangle_2DImage();
         void ResetMatrices();
     };
 }

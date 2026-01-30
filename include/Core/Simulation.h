@@ -1,7 +1,7 @@
 #ifndef SIMULATION_H
 #define SIMULATION_H
-#include "API/Gpu_Backend.h"
-#include "Core/MovementHandler.h"
+#include "API/OpenGL/GLBackend.h"
+#include "Core/MovementStateManager.h"
 #include "Core/Scene.h"
 
 namespace tartarus{
@@ -17,9 +17,9 @@ struct Simulation{
 
     void SetCurrentScene(Scene*);
 
-    Gpu* _gpu;
+    OpenGL* _gpu;
     Scene* _currentScene;
-    MovementHandler _movementHandler;
+    MovementStateManager _movementHandler;
 };
 
 }

@@ -2,7 +2,7 @@
 #define BACKEND_H
 
 #include "Managers/WindowManager.h"
-#include "API/Gpu_Backend.h"
+#include "API/OpenGL/GLBackend.h"
 #include <memory>
 namespace tartarus {
 
@@ -22,7 +22,7 @@ namespace tartarus {
         void UpdateTestWorld(float delta_time);
 
         WindowManager _windowManager;
-        std::unique_ptr<Gpu> _gpu;
+        std::unique_ptr<OpenGL> _gpu;
     };
 
 } // namespace backend

@@ -46,6 +46,9 @@ void printLog(const char* file,
     puts(global::buffer);
     while(finalLength--)
         global::buffer[finalLength] = '\0';
+
+    if(severity == FATAL)
+        assert(false);
 }
 
 }
