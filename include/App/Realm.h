@@ -13,12 +13,14 @@ struct Realm {
     bool Init();
     bool Exit();
 
-    Shader& CompileShader(const char* vert, const char* frag);
     Scene& GetPrimaryScene();
 
+    OpenGL* GetAPI() { return _backend._gpu.get(); }
+
     Backend _backend;
-    SceneManager _scnManagers;
+    std::unique_ptr<SceneManager> _scnManagers;
     GameHandler _gameHandler;
+    std::unique_ptr<LoaderManager> _loader;
 };
 
 } // namespace tartarus

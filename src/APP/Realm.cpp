@@ -19,8 +19,12 @@ bool Realm::Init(){
             static_cast<void*>(&_backend._windowManager)))
         return false;
 
-    if(!_scnManagers.Init())
+    _scnManagers = std::make_unique<SceneManager>();
+    if(!_scnManagers->Init())
         return false;
+
+    _loader = std::make_unique<LoaderManager>();
+    _backend._gpu->_textureManager->LoadScene(_loader.get());
 
     return true;
 }
@@ -32,11 +36,7 @@ bool Realm::Exit(){
     return true;
 }
 
-Shader& Realm::CompileShader(const char* vert, const char* frag){
-    return _backend._gpu->CompileShader(vert, frag);
-}
-
 Scene& Realm::GetPrimaryScene(){
-    return _scnManagers.GetPrimaryScene();
+    return _scnManagers->GetPrimaryScene();
 }
 } // namespace tartarus

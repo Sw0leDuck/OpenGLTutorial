@@ -31,6 +31,11 @@ void Camera::Init(glm::vec3 position,
     _roll = roll;
 }
 
+bool Camera::Init(){
+    // TODO:: does it need anything?
+    return true;
+}
+
 bool Camera::Exit(){
     // TODO:: does it need anything?
     return true;
@@ -76,6 +81,9 @@ void Camera::Update(float delta){
     
     _fov -= _offsets.zOffset;
     _fov = clamp(_fov, 1.f, 45.f);
+
+    _viewMatrix = CalculateViewMatrix();
+    _projMatrix = CalculateProjectionMatrix();
 }
 
 glm::mat4 Camera::CalculateViewMatrix() {
@@ -84,6 +92,14 @@ glm::mat4 Camera::CalculateViewMatrix() {
 
 glm::mat4 Camera::CalculateProjectionMatrix() {
     return glm::perspective(glm::radians(_fov), _screenAspect, _near, _far);
+}
+
+glm::mat4 Camera::GetView(){
+    return _viewMatrix;
+}
+
+glm::mat4 Camera::GetProjection(){
+    return _projMatrix;
 }
 
 glm::mat4 Camera::LookAt(){

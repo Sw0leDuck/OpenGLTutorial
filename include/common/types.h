@@ -26,6 +26,10 @@ struct vec3 {
     float z;
 };
 
+struct mat4 {
+    float values[16];
+};
+
 }
 
 #endif

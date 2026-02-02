@@ -11,16 +11,11 @@ float current_frame = 0;
 float delta_time = 0;
 
 bool Backend::Init(){
-    // this is passed so that the _windowManager can callback to this function
     if(!_windowManager.Init("Tartarus")){
         return false;
     }
 
-#ifdef OPEN_GL_CONTEXT
     _gpu = std::make_unique<OpenGL>();
-#elif VULKAN_CONTEXT
-    void(0); // void for now
-#endif
     if(!_gpu->Init()){
         return false;
     }
@@ -32,7 +27,6 @@ bool Backend::Exit(){
     _windowManager.Exit();
     _gpu->Exit();
     _gpu.reset();
-    // asset::manager::Exit();
     return true;
 }
 

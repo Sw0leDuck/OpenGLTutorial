@@ -5,6 +5,7 @@
  */
 #include "API/OpenGL/GLBuffer.h"
 #include "Common/Types.h"
+#include "Common/Enums.h"
 #include "vector"
 
 namespace tartarus {
@@ -13,9 +14,9 @@ class GLBufferManager;
 
 enum VertexAttributeFlag {
     kPos = (1<<0), // 3
-    kTextCoords = (1<<1), // 2
+    kNormalVector = (1<<1), // 3
     kColor = (1<<2), // 3
-    kNormalVector = (1<<3), // 3
+    kTextCoords = (1<<3), // 2
     kCount = 4,
     kAll = (kColor<<1)-1
 };
@@ -27,7 +28,7 @@ struct GLMeshBuffer {
         kElement = 1
     };
 
-    bool Init(uint, GLBufferManager*);
+    bool Init(BufferName, GLBufferManager*);
     bool Exit();
 
     void BindBuffer();
@@ -37,12 +38,14 @@ struct GLMeshBuffer {
 
     uint _bufferId;
     VertexAttributeFlag _flags;
-    uint _triangleCount;
     DrawType _drawType;
-    bool _valid = false;
-    bool _used = false; 
+    uint _triangleCount;
     GLBufferManager* _bufferManager;
     std::vector<GLBuffer*> _buffers;
+    
+    bool _valid = false;
+    bool _used = false;
+    BufferName _bufferName; 
 };
 
 }

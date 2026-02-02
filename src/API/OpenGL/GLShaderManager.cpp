@@ -26,22 +26,29 @@ bool CheckCompilerStatus(uint shaderId);
 bool CheckLinkStatus(uint programId);
 
 bool GLShaderManager::Init() {
+    _shaders.reserve(10);
+
+    CompileShader(ShaderName::kDefault, 
+        "../../shaders/default.vert", "../../shaders/default.frag");
+
     return true;
 }
 
 bool GLShaderManager::Exit() {
     for(auto& iter : _shaders){
-        glDeleteShader(iter._vertexShaderId);
-        glDeleteShader(iter._fragmentShaderId);
-        glDeleteProgram(iter._programId);
-        iter._manager = nullptr;
+        // Handled in CompileShader
+        // glDeleteShader(iter._vertexShaderId); 
+        // glDeleteShader(iter._fragmentShaderId);
+        glDeleteProgram(iter.second._programId);
+        iter.second._manager = nullptr;
     }
     _shaders.clear();
     return true;
 }
 
-Shader& GLShaderManager::CompileShader(const char* vert, const char* frag){
-    auto& iter = _shaders.emplace_back();
+Shader& GLShaderManager::CompileShader(ShaderName id,
+                                const char* vert, const char* frag){
+    auto& iter = _shaders[id];
     iter._manager = nullptr;
 
     {
@@ -50,7 +57,8 @@ Shader& GLShaderManager::CompileShader(const char* vert, const char* frag){
         if(source.empty()){
             glDeleteShader(iter._vertexShaderId);
             iter.valid = false;
-            LOG(INFO, "Vertex Shader could not be compiled");
+            LOG(INFO, "Vertex Shader %s could not be compiled", 
+                GetShaderName(id));
             return iter;
         }
         auto src = source.c_str();
@@ -72,7 +80,8 @@ Shader& GLShaderManager::CompileShader(const char* vert, const char* frag){
             glDeleteShader(iter._vertexShaderId);
             glDeleteShader(iter._fragmentShaderId);
             iter.valid = false;
-            LOG(INFO, "Vertex Shader could not be compiled");
+            LOG(INFO, "Fragment Shader %s could not be compiled", 
+                GetShaderName(id));
         }
         auto src = source.c_str();
         glShaderSource(iter._fragmentShaderId, 1, &src, nullptr);
@@ -103,11 +112,20 @@ Shader& GLShaderManager::CompileShader(const char* vert, const char* frag){
         }
     }
 
+    glDeleteShader(iter._vertexShaderId);
+    glDeleteShader(iter._fragmentShaderId);
+
     iter._manager = this;
     iter.valid = true;
     return iter;
 }
 
+Shader* GLShaderManager::GetShader(ShaderName id){
+    auto iter = _shaders.find(id);
+    if(iter == _shaders.end())
+        SCREAM("Shader %s not found\n", GetShader(id));
+    return &iter->second;
+}
 
 
 bool CheckCompilerStatus(uint shaderId){

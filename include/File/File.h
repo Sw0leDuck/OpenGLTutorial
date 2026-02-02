@@ -1,7 +1,8 @@
 #ifndef FILE_H
 #define FILE_H
 #include "Common/Types.h"
-#include "vector"
+#include "Common/Enums.h"
+#include "unordered_map"
 
 // contains all the operations done to load files from disk such as
 // jpg, png, assimp etc etc?
@@ -20,16 +21,8 @@ struct RawImage {
     int _height;
     int _nrChannels;
     Type _type;
-
-    bool operator==(const RawImage& other){
-        return this->_height == other._height &&
-                this->_width == other._width &&
-                this->_nrChannels == other._nrChannels &&
-                this->_type == other._type &&
-                this->_data == other._data;
-    }
     
-    bool LoadImage(const char* filePath, Type type);
+    bool LoadImage(const char* filePath);
     void UnloadImage();
 };
 
@@ -38,10 +31,12 @@ struct LoaderManager {
     bool Init();
     bool Exit();
 
-    RawImage& LoadImage(const char* filePath, RawImage::Type _type);
-    void DeleteImage(RawImage& ref);
+    RawImage* LoadImage(AssetName id);
+    void DeleteImage(AssetName id);
 
-    std::vector<RawImage> _rawImages;
+    void ClearImages();
+
+    std::unordered_map<AssetName, RawImage> _rawImages;
 };
 
 }

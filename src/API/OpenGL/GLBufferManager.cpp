@@ -1,40 +1,48 @@
 #include "glad/glad.h"
 #include "API/OpenGL/GLBufferManager.h"
 #include "API/OpenGL/GLBuffer.h"
-#include "Common/Types.h"
+#include "Common/ConstVertices.h"
+#include "Common/Enums.h"
 
 namespace tartarus {
 
 bool GLBufferManager::Init(){
-    // hardcode value that the program will use at most 20 different buffers
-    _buffers.reserve(20);
-    _meshBuffers.reserve(20);
-    AllocateGLBuffers();
-    AllocateGLVertexArrays();
+    // Bypass uaf bugs for now, should create a personal stl that does not
+    // deallocate memory
+    _vertexBuffers.reserve(10);
+    _indexBuffers.reserve(10);
+    _meshBuffers.reserve(10);
+
+    // lets allocate some important buffers
+    GetCreateMeshBuffer(BufferName::kRectangleTextureNorm)->LoadData(
+        {(void*)vertices::CubeNormTexture, sizeof(vertices::CubeNormTexture)},
+        VertexAttributeFlag::kPos | 
+        VertexAttributeFlag::kNormalVector | 
+        VertexAttributeFlag::kTextCoords);
+
+    GetCreateMeshBuffer(BufferName::kRectangleTexture)->LoadData(
+        {(void*)vertices::CubeTexture, sizeof(vertices::CubeTexture)},
+        VertexAttributeFlag::kPos | 
+        VertexAttributeFlag::kTextCoords);    
+
     return true;
 }
 
 bool GLBufferManager::Exit(){
-    std::vector<uint> bufferIds;
-    bufferIds.reserve(_buffers.size());
-    for(auto& iter : _buffers){
-        bufferIds.emplace_back(iter._bufferId);
-        iter.Exit();
+    for(auto& iter : _vertexBuffers){
+        iter.second.Exit();
     }
+    _vertexBuffers.clear();
 
-    if(bufferIds.size())
-        glDeleteBuffers(bufferIds.size(), bufferIds.data());
+    for(auto& iter : _indexBuffers){
+        iter.second.Exit();
+    }
+    _indexBuffers.clear();
 
-    bufferIds.clear();
-
-    bufferIds.reserve(_meshBuffers.size());
     for(auto& iter : _meshBuffers){
-        bufferIds.emplace_back(iter._bufferId);
-        iter.Exit();
+        iter.second.Exit();
     }
-
-    if(bufferIds.size())
-        glDeleteVertexArrays(bufferIds.size(), bufferIds.data());
+    _meshBuffers.clear();
     
     return true;
 }
@@ -42,66 +50,36 @@ bool GLBufferManager::Exit(){
 // TODO: CRITICAL : The following will trigger UAF bugs across the program
 // Solution, implement a costum std::vector container that is strong against
 // multiple reallocation, the same must be done for the ShaderManager
-GLBuffer* GLBufferManager::GetNextBuffer(GLBuffer::BufferType type){
-    for(auto& iter : _buffers){
-        if((iter._type == GLBuffer::BufferType::kInvalid) || (iter._used == false)){
-            iter._type = type;
-            iter._used = true;
-            return &(iter);
-        }
+// Solution: change vector -> unordered_map ?? done ??
+GLBuffer* GLBufferManager::GetGpuArrayBuffer(BufferName id){
+    auto iter = _vertexBuffers.find(id);
+    if(iter == _vertexBuffers.end()){
+        auto pair = _vertexBuffers.emplace(id, GLBuffer());
+        pair.first->second.Init(GLBuffer::BufferType::kArrayBuffer);
+        return &pair.first->second;
     }
-    AllocateGLBuffers();
-
-    // immediately take a GLBuffer that is not used 100%
-    _buffers.back()._type = type;
-    _buffers.back()._used = true;
-    return &(_buffers.back());
+    return &iter->second;
 }
 
-GLMeshBuffer* GLBufferManager::GetNextMeshBuffer(){
-    for(auto& iter : _meshBuffers){
-        if((!iter._valid) || (!iter._used)){
-            iter._used = true;
-            return &(iter);
-        }
+GLBuffer* GLBufferManager::GetGpuIndexBuffer(BufferName id){
+    auto iter = _indexBuffers.find(id);
+    if(iter == _indexBuffers.end()){
+        auto pair = _indexBuffers.emplace(id, GLBuffer());
+        pair.first->second.Init(GLBuffer::BufferType::kIndexBuffer);
+        return &pair.first->second;
     }
-    AllocateGLBuffers();
-
-    // immediately take a GLBuffer that is not used 100%
-    _meshBuffers.back()._used = true;
-    return &(_meshBuffers.back());
+    return &iter->second;
 }
 
-bool GLBufferManager::AllocateGLBuffers(){
 
-    {
-        uint tmpBufferId[20];
-
-        glGenBuffers(20, tmpBufferId);
-
-        for(uint index=0; index < 20; index++){
-            auto& iter = _buffers.emplace_back(GLBuffer{});
-            iter.Init(tmpBufferId[index],
-                GLBuffer::BufferType::kInvalid); 
-        }
+GLMeshBuffer* GLBufferManager::GetCreateMeshBuffer(BufferName id){
+    auto iter = _meshBuffers.find(id);
+    if(iter == _meshBuffers.end()){
+        auto pair = _meshBuffers.emplace(id, GLMeshBuffer());
+        pair.first->second.Init(id, this);
+        return &pair.first->second;
     }
-
-    return true;
-}
-
-bool GLBufferManager::AllocateGLVertexArrays(){
-    {
-        uint tmpBufferId[20];
-
-        glGenVertexArrays(20, tmpBufferId);
-
-        for(uint index=0; index < 20; index++){
-            auto& iter = _meshBuffers.emplace_back(GLMeshBuffer{});
-            iter.Init(tmpBufferId[index], this); 
-        }
-    }
-
-    return true;
+    return &iter->second;
 }
 
 }

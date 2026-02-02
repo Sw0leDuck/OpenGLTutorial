@@ -1,9 +1,9 @@
 #ifndef GL_SHADER_MANAGER_H
 #define GL_SHADER_MANAGER_H
-#include "Common/Types.h"
 #include "string"
 #include "Core/Shader.h"
-#include "vector"
+#include "Common/Enums.h"
+#include "unordered_map"
 
 namespace tartarus {
 
@@ -14,9 +14,10 @@ struct ShaderLoader {
 struct GLShaderManager {
     bool Init();
     bool Exit();
-    Shader& CompileShader(const char* vert, const char* frag);
+    Shader& CompileShader(ShaderName id, const char* vert, const char* frag);
+    Shader* GetShader(ShaderName id);
     
-    std::vector<Shader> _shaders;
+    std::unordered_map<ShaderName, Shader> _shaders;
     ShaderLoader _loader;
 };
 

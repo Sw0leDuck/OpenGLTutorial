@@ -8,7 +8,7 @@ struct GLBuffer {
     enum BufferType {
         kInvalid = 0,
         kArrayBuffer = 1,
-        kElementBuffer = 2
+        kIndexBuffer = 2
     };
 
     struct OpenGLArguments {
@@ -20,14 +20,28 @@ struct GLBuffer {
     // We could free them after uploading 
     // them to the GPU
     struct BufferData {
+        BufferData(
+            void* vertices = nullptr, 
+            uint verSize = -1,
+            void* indices = nullptr,
+            uint indexSize = -1,
+            bool mallocUse = false) : 
+        _vertices(vertices), 
+        _vertSize(verSize),
+        _indices(indices),
+        _indexSize(indexSize),
+        _mallocUsed(mallocUse) {}
+
         void* _vertices = nullptr;
         uint _vertSize = -1;
 
         void* _indices = nullptr;
         uint _indexSize = -1;
+
+        bool _mallocUsed = false;
     };
 
-    bool Init(uint, BufferType);
+    bool Init(BufferType);
     bool Exit();
 
     bool IsValid() { return true; }

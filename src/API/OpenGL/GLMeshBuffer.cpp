@@ -9,8 +9,8 @@ void SetVertexAttribute(bool set, uint& index, uint size,
             uint type, uint normalized, 
             uint stride, uint& offset){
     if(set){
-        glVertexAttribPointer(index, size, type,
-            normalized, stride, (void*)((ull)offset));
+        glVertexAttribPointer(index, size, type, normalized, stride, 
+            (void*)((ull)offset));
         glEnableVertexAttribArray(index);
         index++;
         // Hardcoded float value, up to now, the only
@@ -24,29 +24,33 @@ uint ComputeStrideFromFlags(uint flags){
     if(flags & (uint)VertexAttributeFlag::kPos)
         stride += 3*sizeof(float);
 
-    if(flags & (uint)VertexAttributeFlag::kTextCoords)
-        stride += 2*sizeof(float);
+    if(flags & (uint)VertexAttributeFlag::kNormalVector)
+        stride += 3*sizeof(float);
 
     if(flags & (uint)VertexAttributeFlag::kColor)
         stride += 3*sizeof(float);
 
-    if(flags & (uint)VertexAttributeFlag::kNormalVector)
-        stride += 3*sizeof(float);
+    if(flags & (uint)VertexAttributeFlag::kTextCoords)
+        stride += 2*sizeof(float);
 
     return stride;
 }
 
-bool GLMeshBuffer::Init(uint bufferId, GLBufferManager* bufferManager){
+bool GLMeshBuffer::Init(BufferName id, GLBufferManager* bufferManager){
+    _bufferName = id;
     _valid = false;
     _bufferManager = bufferManager;
     _buffers.reserve(2);
-    _bufferId = bufferId;
+
+    glGenVertexArrays(1, &_bufferId);
+
     return true;
 }
 
 bool GLMeshBuffer::Exit(){
     _buffers.clear();
     _bufferManager = nullptr;
+    glDeleteVertexArrays(1, &_bufferId);
     return true;
 }
 
@@ -77,7 +81,7 @@ void GLMeshBuffer::LoadData(GLBuffer::BufferData data, uint flags){
         
     if(data._vertices){
         _buffers.emplace_back(
-            _bufferManager->GetNextBuffer(GLBuffer::BufferType::kArrayBuffer));
+            _bufferManager->GetGpuArrayBuffer(_bufferName));
         _buffers.back()->_bufferData = data;
         _buffers.back()->LoadArrayBuffer(GL_STATIC_DRAW);
         _drawType = DrawType::kArray;
@@ -85,11 +89,14 @@ void GLMeshBuffer::LoadData(GLBuffer::BufferData data, uint flags){
 
     if(data._indices){
         _buffers.emplace_back(
-            _bufferManager->GetNextBuffer(GLBuffer::BufferType::kElementBuffer));
+            _bufferManager->GetGpuIndexBuffer(_bufferName));
         _buffers.back()->_bufferData = data;
         _buffers.back()->LoadElementBuffer(GL_STATIC_DRAW);
         _drawType = DrawType::kElement;
     }
+
+    for(auto& iter : _buffers)
+        iter->BindBuffer();
 
     uint stride = ComputeStrideFromFlags(flags);
     uint index = 0, offset = 0;
@@ -97,8 +104,8 @@ void GLMeshBuffer::LoadData(GLBuffer::BufferData data, uint flags){
     for(uint j=0; j<(uint)VertexAttributeFlag::kCount; j++){
         // kTexCoords is represented only with 2 floats
         // all the others attributes need 3
-        uint size = j == 1  ? 2 : 3;
-        SetVertexAttribute(flags & (uint)(1<<j), 
+        uint size = j == 3  ? 2 : 3;
+        SetVertexAttribute(flags & (uint)(1<<j),
             index, 
             size, 
             GL_FLOAT, 
@@ -110,6 +117,7 @@ void GLMeshBuffer::LoadData(GLBuffer::BufferData data, uint flags){
     _triangleCount = data._indexSize != -1 ? 
         data._indexSize/sizeof(uint) : 
         data._vertSize / stride;
+    
     CHECK((data._vertSize % stride == 0) || 
         (data._indexSize % sizeof(uint) == 0))
 

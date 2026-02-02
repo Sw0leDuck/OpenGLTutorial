@@ -6,14 +6,15 @@ namespace tartarus {
 
 void LoadBuffer(void* data, uint size, uint target, uint usage, uint bufferId);
 
-bool GLBuffer::Init(uint bufferId, BufferType type){
+bool GLBuffer::Init(BufferType type){
     // this->_bufferManagerPtr = bufferManagerPtr;
     _type = type;
-    _bufferId = bufferId;
+    glGenBuffers(1, &_bufferId);
     return true;
 }
 
 bool GLBuffer::Exit(){
+    glDeleteBuffers(1, &_bufferId);
     return true;
 }
 
@@ -24,7 +25,8 @@ void GLBuffer::LoadArrayBuffer(uint usage){
     LoadBuffer(_bufferData._vertices, _bufferData._vertSize, 
         _glBufferArguments._target, _glBufferArguments._usage, _bufferId);
 
-    free(_bufferData._vertices);
+    if(_bufferData._mallocUsed)
+        free(_bufferData._vertices);
 }
 
 void GLBuffer::LoadElementBuffer(uint usage){
@@ -34,7 +36,8 @@ void GLBuffer::LoadElementBuffer(uint usage){
     LoadBuffer(_bufferData._indices, _bufferData._indexSize, 
         _glBufferArguments._target, _glBufferArguments._usage, _bufferId);
 
-    free(_bufferData._indices);
+    if(_bufferData._mallocUsed)
+        free(_bufferData._indices);
 }
 
 void GLBuffer::BindBuffer(){
@@ -48,6 +51,7 @@ void GLBuffer::UnbindBuffer(){
 void LoadBuffer(void* data, uint size, uint target, uint usage, uint bufferId){
     glBindBuffer(target, bufferId);
     glBufferData(target, size, data, usage);
+    glBindBuffer(target, 0);
 }
 
 }

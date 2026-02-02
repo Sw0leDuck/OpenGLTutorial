@@ -15,8 +15,17 @@ struct OpenGL {
     void ClearScreen();
     void UpdateViewPort(uint, uint);
 
-    inline Shader& CompileShader(const char* vert, const char* frag) { return _shaderManager->CompileShader(vert, frag); }
-    inline GLBuffer* GetNextBuffer(GLBuffer::BufferType type) { return _bufferManager->GetNextBuffer(type); }
+    GLMeshBuffer* GetMeshBuffer(BufferName id) {
+        return _bufferManager->GetCreateMeshBuffer(id);
+    }
+
+    GLTexture2D* GetTexture(AssetName id) {
+        return _textureManager->GetTexture(id);
+    }
+
+    Shader* GetShader(ShaderName id){
+        return _shaderManager->GetShader(id);
+    }
 
     std::unique_ptr<GLShaderManager> _shaderManager;
     std::unique_ptr<GLBufferManager> _bufferManager;

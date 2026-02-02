@@ -2,8 +2,7 @@
 #define SCENE_MANAGER_H
 
 #include "Core/Scene.h"
-#include <map>
-// #include "Camera/fly_camera.h"
+#include <unordered_map>
 
 namespace tartarus {
 
@@ -18,9 +17,8 @@ namespace tartarus {
 
         Scene& GetPrimaryScene();
 
-
         // FlyCamera _playerCamera;
-        std::map<SceneId, Scene> _scenes;
+        std::unordered_map<SceneId, Scene> _scenes;
     };
 
 } // namespace tartarus

@@ -21,10 +21,13 @@ void GameHandler::GameLoop(){
     float delta = 0;
 
     while(_simulation.Run()){
+
+        // Eeeeewww 😨, this should probably be triggered somewhere else
         if(_windowManager->needResizeViewport)
             _simulation._gpu->UpdateViewPort(
                 _windowManager->_width, 
                 _windowManager->_height);
+
 
         // handle input
         _simulation.BeginFrame(delta);

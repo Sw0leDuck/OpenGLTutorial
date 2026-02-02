@@ -3,27 +3,32 @@
 #include "Objects/GameObject.h"
 #include "Camera/Camera.h"
 #include "Objects/Light.h"
+#include <memory>
 
 namespace tartarus {
 
-    struct Scene {
-        bool Init();
-        bool Exit();
+struct Static3D;
 
-        void InsertObject(GameObject&&);
-        void InsertCamera(Camera&);
-        void InsertLight(Light&);
+struct Scene {
+    bool Init();
+    bool Exit();
 
-        void UpdateFrame(float);
-        void UpdateObjects(float);
-        void UpdateCamera(float);
-        void UpdateLights(float);
-
-
-        std::vector<GameObject> _objects;
-        GameObject _camera;
-        std::vector<GameObject> _lights;
-    };
+    template<typename T>
+    T* GenerateObject(){
+        _objects.emplace_back(std::move(std::make_unique<T>()));
+        return _objects.back()->AsType<T>();
+    }
+    Camera* GenerateCamera();
+    
+    void UpdateFrame(float);
+    void SimulateObjects(float);
+    void UpdateCamera(float);
+    void SimulateLights(float);
+    
+    std::vector<std::unique_ptr<GameObject>> _objects;
+    std::unique_ptr<GameObject> _camera;
+    std::vector<std::unique_ptr<GameObject>> _lights;
+};
 
 } // namespace tartarus
 

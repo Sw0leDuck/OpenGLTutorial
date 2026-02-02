@@ -1,3 +1,17 @@
+# OpenGLTutorial
+
+## Plans
+The purpose of this repo is to start with the tutorials provided from 
+https://learnopengl.com and implement some kind of a OpenGL game engine ( ? )
+after many rewrites.
+
+### Assets
+The creators of each asset used can be found below
+
+| Name           | Creator    | Website                 | Socials              |
+| :-:            |  :-:       | :-:                     | :-:                  |
+Torment Textures | Bradley D. | https://strideh.itch.io | @strideh.bsky.social |
+
 # Steps to install
 
 The following steps are for a Windows enviroment alongside VSCode
@@ -73,7 +87,7 @@ cmake --build build -- install
 
 # TODO
 
-- ~~ Continue to second section ( Lighting )~~
+- ~~Continue to second section ( Lighting )~~
 - ~~Find how to create Debug/Release build~~
-- Better error logs to ease the debugging process
+- ~~Better error logs to ease the debugging process~~
 - Probably rewrite again 

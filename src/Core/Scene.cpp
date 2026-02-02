@@ -1,4 +1,5 @@
 #include "Core/Scene.h"
+#include "Common/Logging.h"
 
 namespace tartarus {
 
@@ -10,34 +11,38 @@ bool Scene::Exit(){
     return true;
 }
 
-void Scene::InsertObject(GameObject&& object){
-    _objects.emplace_back(std::move(object));
-}
-
-
-void Scene::InsertCamera(Camera& camera){
-    _camera = std::move(camera);
-}
-
-void Scene::InsertLight(Light& light){
-    _lights.emplace_back(std::move(light));
+Camera* Scene::GenerateCamera(){
+    _camera = std::make_unique<Camera>();
+    return _camera->AsType<Camera>();
 }
 
 void Scene::UpdateFrame(float delta){
     UpdateCamera(delta);
-    UpdateLights(delta);
-    UpdateObjects(delta);
+    SimulateLights(delta);
+    SimulateObjects(delta);
 }
 
-void Scene::UpdateObjects(float delta){
+void Scene::SimulateObjects(float delta){
+    auto viewMatrix = _camera->AsType<Camera>()->GetView();
+    auto projMatrix = _camera->AsType<Camera>()->GetProjection();
 
+
+    // Update the Shaders with the new view/proj matrices
+    for(auto& iter : _objects){
+        iter->_viewMatrix = viewMatrix;
+        iter->_projectionMatrix = projMatrix;
+        
+        iter->Update(delta);
+        // draw because the values are still in the cpu cache ???
+        iter->Draw(delta);
+    }
 }
 
 void Scene::UpdateCamera(float delta){
-    _camera.Update(delta);
+    _camera->Update(delta);
 }
 
-void Scene::UpdateLights(float delta){
+void Scene::SimulateLights(float delta){
 
 }
 

@@ -1,19 +1,24 @@
 #define STB_IMAGE_IMPLEMENTATION
-#include "File/File.h"
 #include "stb/stb_image.h"
-
-#include <algorithm> // Eeew 😱, TODO: remove this and make a std::find algorithm
+#include "Common/Logging.h"
+#include "File/File.h"
 
 namespace tartarus {
 
-bool RawImage::LoadImage(const char* filePath, RawImage::Type type){
-
+bool RawImage::LoadImage(const char* filePath){
     _data = stbi_load(filePath, &_width, &_height, &_nrChannels, 0);
     if(!_data){
         _type = kInvalid;
         return false;
     }
-    _type = type;
+
+    _type = RawImage::Type::kPNG;
+
+    if(_nrChannels == 4)
+        _type = RawImage::Type::kPNG;
+    else if(_nrChannels == 3)
+        _type = RawImage::Type::kJpg;
+
     return true;
 }
 
@@ -21,34 +26,37 @@ void RawImage::UnloadImage(){
     stbi_image_free(_data);
 }
 
-
 bool LoaderManager::Init(){
+    _rawImages.reserve(10);
     stbi_set_flip_vertically_on_load(true);
     return true;
 }
 
 bool LoaderManager::Exit(){
-    for(auto& iter : _rawImages)
-        iter.UnloadImage();
-    _rawImages.clear();
-
+    ClearImages();
     return true;
 }
 
-RawImage& LoaderManager::LoadImage(const char* filePath, RawImage::Type _type){
-    auto& iter = _rawImages.emplace_back();
-    iter.LoadImage(filePath, _type);
-    return iter;
+RawImage* LoaderManager::LoadImage(AssetName id){
+    CHECK(_rawImages.find(id) == _rawImages.end());
+    auto iter = _rawImages.emplace(id, RawImage());
+    iter.first->second.LoadImage(GetAssetPathName(id));
+    return &iter.first->second;
 }
 
-void LoaderManager::DeleteImage(RawImage& ref){
-    auto iter = std::find(_rawImages.begin(), _rawImages.end(), ref);
-    if(iter == _rawImages.end())
-        return;
-    iter->UnloadImage();
-    _rawImages.erase(iter);
+void LoaderManager::DeleteImage(AssetName id){
+    if(_rawImages.find(id) != _rawImages.end()){
+        _rawImages[id].UnloadImage();
+        _rawImages.erase(id);
+    }
 }
 
+void LoaderManager::ClearImages(){
+    for(auto& iter : _rawImages){
+        iter.second.UnloadImage();
+    }
+    _rawImages.clear();
+}
 
 
 }

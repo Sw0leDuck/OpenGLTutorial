@@ -30,6 +30,8 @@ struct Camera : GameObject {
     glm::mat4 LookAt();
     glm::mat4 CalculateViewMatrix();
     glm::mat4 CalculateProjectionMatrix();
+    glm::mat4 GetView();
+    glm::mat4 GetProjection();
 
     glm::vec3 _position;
     glm::vec3 _cameraTarget;
@@ -53,6 +55,8 @@ struct Camera : GameObject {
 
     OffsetCoordinates _offsets;
     CAMERA_MOVEMENT _movement;
+    glm::mat4 _viewMatrix;
+    glm::mat4 _projMatrix;
 };
 }
 

@@ -22,7 +22,10 @@ add_executable(OpenGLTutorial
     src/Backend/Backend.cpp
     src/Camera/Camera.cpp
     src/Common/Logging.cpp
+    src/Common/Enums.cpp
+    src/Common/Matrix.cpp
     src/Core/Objects/Static3D.cpp
+    src/Core/Objects/GameObject.cpp
     src/Core/GameHandler.cpp
     src/Core/MovementStateManager.cpp
     src/Core/Scene.cpp

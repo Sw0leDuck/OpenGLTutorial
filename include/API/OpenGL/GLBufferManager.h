@@ -2,7 +2,7 @@
 #define GL_BUFFER_MANAGER_H
 #include "API/OpenGL/GLBuffer.h"
 #include "API/OpenGL/GLMeshBuffer.h"
-#include "vector"
+#include "unordered_map"
 
 namespace tartarus {
 
@@ -12,14 +12,13 @@ struct GLBufferManager {
     bool Init();
     bool Exit();
 
-    bool AllocateGLBuffers();
-    bool AllocateGLVertexArrays();
+    GLBuffer* GetGpuArrayBuffer(BufferName);
+    GLBuffer* GetGpuIndexBuffer(BufferName);
+    GLMeshBuffer* GetCreateMeshBuffer(BufferName);
 
-    GLBuffer* GetNextBuffer(GLBuffer::BufferType type);
-    GLMeshBuffer* GetNextMeshBuffer();
-
-    std::vector<GLBuffer> _buffers;
-    std::vector<GLMeshBuffer> _meshBuffers;
+    std::unordered_map<BufferName, GLBuffer> _vertexBuffers;
+    std::unordered_map<BufferName, GLBuffer> _indexBuffers;
+    std::unordered_map<BufferName, GLMeshBuffer> _meshBuffers;
 };
 
 }
