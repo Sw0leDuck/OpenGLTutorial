@@ -23,6 +23,7 @@ struct GameObject {
     void SetWorldPosition(Matrix);
     void RotateWorldPosition(float degree, glm::vec3 vec3);
     void ScaleWorldPosition(glm::vec3 vec3);
+    void TranslateWorldPosition(glm::vec3 vec3);
 
     virtual void Draw(float) { }
     virtual void Update(float) { }

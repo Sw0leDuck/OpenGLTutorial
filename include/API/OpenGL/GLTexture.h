@@ -11,7 +11,7 @@ struct GLTexture2D {
     struct TextureArgs {
         uint _target;
         RawImage* _imageData;
-        uint _type;
+        uint _format;
     };
     
     bool Init(AssetName, GLTextureManager*);
@@ -19,7 +19,7 @@ struct GLTexture2D {
 
     void BindTexture();
     void UnbindTexture();
-    void SetTextureMetadata(RawImage* data, uint, uint);
+    void SetTextureMetadata(RawImage* data, uint);
     void LoadImage();
 
     uint ConfirmAttachment();

@@ -14,7 +14,7 @@ struct ShaderLoader {
 struct GLShaderManager {
     bool Init();
     bool Exit();
-    Shader& CompileShader(ShaderName id, const char* vert, const char* frag);
+    void CompileShader(ShaderName id, const char* vert, const char* frag);
     Shader* GetShader(ShaderName id);
     
     std::unordered_map<ShaderName, Shader> _shaders;

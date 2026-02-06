@@ -25,7 +25,7 @@ struct Shader {
     };
 
     std::unordered_map<
-        const char*, std::pair<UniformType, UniformValue>> _uniforms;
+        std::string_view, std::pair<UniformType, UniformValue>> _uniforms;
 
     uint _fragmentShaderId = -1;
     uint _vertexShaderId = -1;
@@ -34,7 +34,7 @@ struct Shader {
     std::string _vertexSrc;
     std::string _fragmentSrc;
 
-    
+    void InitUniformName(const char* name);
     void AddUniform(const char* name, std::pair<UniformType, UniformValue>);
 
     void UseProgam();

@@ -1,28 +1,28 @@
-#include "glad/glad.h"
+#include "API/OpenGL/GLUtil.h"
 #include "API/OpenGL/GLTexture.h"
 #include "API/OpenGL/GLTextureManager.h"
 
 namespace tartarus {
 
 bool GLTexture2D::Init(AssetName name, GLTextureManager* managerPtr){
-    glGenTextures(1, &_textureId);
+    GL_CHECK_CALL(glGenTextures(1, &_textureId));
     _assetName = name;
     _manager = managerPtr;
     return true;
 }
 
 bool GLTexture2D::Exit(){
-    glDeleteTextures(1, &_textureId);
+    GL_CHECK_CALL(glDeleteTextures(1, &_textureId))
     return true;
 }
 
 void GLTexture2D::BindTexture(){
-    glActiveTexture(GL_TEXTURE0+_attachIndex);
-    glBindTexture(GL_TEXTURE_2D, _textureId);
+    GL_CHECK_CALL(glActiveTexture(GL_TEXTURE0+_attachIndex))
+    GL_CHECK_CALL(glBindTexture(GL_TEXTURE_2D, _textureId))
 }
 
 void GLTexture2D::UnbindTexture(){
-    glBindTexture(GL_TEXTURE_2D, 0);
+    GL_CHECK_CALL(glBindTexture(GL_TEXTURE_2D, 0))
 }
 
 uint GLTexture2D::ConfirmAttachment(){
@@ -33,10 +33,16 @@ uint GLTexture2D::ConfirmAttachment(){
     return index;
 }
 
-void GLTexture2D::SetTextureMetadata(RawImage* data, uint target, uint type){
+void GLTexture2D::SetTextureMetadata(RawImage* data, uint target){
     _texArgs._imageData = data;
     _texArgs._target = target;
-    _texArgs._type = type;
+
+    if(data->_nrChannels == 3)
+        _texArgs._format = GL_RGB;
+    else if(data->_nrChannels == 4)
+        _texArgs._format = GL_RGBA;
+    else
+        SCREAM("Implement correct format recognition");
 
     _height = _texArgs._imageData->_height;
     _width = _texArgs._imageData->_width;
@@ -46,23 +52,23 @@ void GLTexture2D::SetTextureMetadata(RawImage* data, uint target, uint type){
 void GLTexture2D::LoadImage(){
     this->BindTexture();
 
-    glTextureParameteri(_textureId, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTextureParameteri(_textureId, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    glTextureParameteri(_textureId, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTextureParameteri(_textureId, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    GL_CHECK_CALL(glTextureParameteri(_textureId, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE))
+    GL_CHECK_CALL(glTextureParameteri(_textureId, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE))
+    GL_CHECK_CALL(glTextureParameteri(_textureId, GL_TEXTURE_MIN_FILTER, GL_NEAREST))
+    GL_CHECK_CALL(glTextureParameteri(_textureId, GL_TEXTURE_MAG_FILTER, GL_NEAREST))
 
-    glTexImage2D(
+    GL_CHECK_CALL(glTexImage2D(
         _texArgs._target,
         0,
-        _texArgs._type,
+        _texArgs._format,
         _texArgs._imageData->_width,
         _texArgs._imageData->_height,
         0,
-        _texArgs._type,
+        _texArgs._format,
         GL_UNSIGNED_BYTE,
         _texArgs._imageData->_data
-    );
-    glGenerateMipmap(_texArgs._target);
+    ))
+    GL_CHECK_CALL(glGenerateMipmap(_texArgs._target))
 
     this->UnbindTexture();
 

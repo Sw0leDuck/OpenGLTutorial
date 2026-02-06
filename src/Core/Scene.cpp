@@ -1,5 +1,5 @@
 #include "Core/Scene.h"
-#include "Common/Logging.h"
+#include "Core/Objects/RenderObject.h"
 
 namespace tartarus {
 
@@ -40,6 +40,15 @@ void Scene::SimulateObjects(float delta){
 
 void Scene::UpdateCamera(float delta){
     _camera->Update(delta);
+    for(auto& iter : _objects){
+        auto x = iter->AsType<RenderObject>();
+        // dirty way
+        if(x){
+            x->_cameraPosition.x = _camera->AsType<Camera>()->_position.x;
+            x->_cameraPosition.y = _camera->AsType<Camera>()->_position.y;
+            x->_cameraPosition.z = _camera->AsType<Camera>()->_position.z;
+        }
+    }
 }
 
 void Scene::SimulateLights(float delta){

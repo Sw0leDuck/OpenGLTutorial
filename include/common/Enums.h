@@ -27,7 +27,8 @@ enum class AssetName : unsigned int {
     kBlood_0 = 3,
     kBarrel_0 = 4,
     kBarrelSpecular_0 = 5,
-    kCount = kBarrelSpecular_0+1
+    kMonster_0 = 6,
+    kCount = kMonster_0+1
 };
 
 const char* GetAssetPathName(AssetName id);

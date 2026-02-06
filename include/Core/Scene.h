@@ -2,7 +2,7 @@
 #define SCENE_H
 #include "Objects/GameObject.h"
 #include "Camera/Camera.h"
-#include "Objects/Light.h"
+// #include "Objects/Light.h"
 #include <memory>
 
 namespace tartarus {

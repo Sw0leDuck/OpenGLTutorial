@@ -1,5 +1,5 @@
+#include "API/OpenGL/GLEnums.h"
 #include "Common/Logging.h"
-#include "glad/glad.h"
 #include "API/OpenGL/GLTextureManager.h"
 
 namespace tartarus {
@@ -26,7 +26,7 @@ void GLTextureManager::LoadScene(LoaderManager* loader){
     for(uint index=0; index<(uint)AssetName::kCount; index++){
         auto* ref = GenerateTexture((AssetName)index);
         ref->SetTextureMetadata(_loader->LoadImage((AssetName)index), 
-            GL_TEXTURE_2D, GL_UNSIGNED_BYTE);
+            GL_TEXTURE_2D);
         ref->LoadImage();
     }
 
@@ -68,7 +68,6 @@ GLTexture2D* GLTextureManager::GetTexture(AssetName id){
 
 uint GLTextureManager::ConfirmAttachment(GLTexture2D* tex){
     uint index = 0;
-    uint id = tex->_textureId;
     for(; index<std::size(_attachemntState); index++){
         if(_attachemntState[index] == tex)
             return index;

@@ -1,8 +1,5 @@
-#include "Common/Logging.h"
+#include "API/OpenGL/GLUtil.h"
 #include "API/OpenGL/GLBackend.h"
-#include "API/OpenGL/GLShaderManager.h"
-#include "API/OpenGL/GLBufferManager.h"
-#include "glad/glad.h"
 #include "GLFW/glfw3.h"
 
 namespace tartarus {
@@ -24,7 +21,7 @@ bool OpenGL::Init(){
     if(!_textureManager->Init())
         return false;
 
-    glEnable(GL_DEPTH_TEST);
+    this->EnableDepthTest();
     return true;
 }
 
@@ -46,11 +43,16 @@ bool OpenGL::Exit(){
 
 
 void OpenGL::ClearScreen(){
-    glClearColor(0.2, 0.4, 0.6, 1.0);
+    GL_MAKE_CALL(glClearColor(0.2, 0.4, 0.6, 1.0))
+    GL_MAKE_CALL(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT))
 }
 
 void OpenGL::UpdateViewPort(uint width, uint height){
-    glViewport(0, 0, width, height);
+    GL_MAKE_CALL(glViewport(0, 0, width, height))
+}
+
+void OpenGL::EnableDepthTest(){
+    GL_MAKE_CALL(glEnable(GL_DEPTH_TEST))
 }
 
 } // backend::gl

@@ -1,5 +1,4 @@
-#include "Common/Logging.h"
-#include "glad/glad.h"
+#include "API/OpenGL/GLUtil.h"
 #include "API/OpenGL/GLMeshBuffer.h"
 #include "API/OpenGL/GLBufferManager.h"
 
@@ -9,9 +8,9 @@ void SetVertexAttribute(bool set, uint& index, uint size,
             uint type, uint normalized, 
             uint stride, uint& offset){
     if(set){
-        glVertexAttribPointer(index, size, type, normalized, stride, 
-            (void*)((ull)offset));
-        glEnableVertexAttribArray(index);
+        GL_CHECK_CALL(glVertexAttribPointer(index, size, type, normalized, stride, 
+            (void*)((ull)offset)))
+        GL_CHECK_CALL(glEnableVertexAttribArray(index))
         index++;
         // Hardcoded float value, up to now, the only
         // type passed is GL_FLOAT
@@ -42,7 +41,7 @@ bool GLMeshBuffer::Init(BufferName id, GLBufferManager* bufferManager){
     _bufferManager = bufferManager;
     _buffers.reserve(2);
 
-    glGenVertexArrays(1, &_bufferId);
+    GL_CHECK_CALL(glGenVertexArrays(1, &_bufferId))
 
     return true;
 }
@@ -50,30 +49,30 @@ bool GLMeshBuffer::Init(BufferName id, GLBufferManager* bufferManager){
 bool GLMeshBuffer::Exit(){
     _buffers.clear();
     _bufferManager = nullptr;
-    glDeleteVertexArrays(1, &_bufferId);
+    GL_CHECK_CALL(glDeleteVertexArrays(1, &_bufferId))
     return true;
 }
 
 void GLMeshBuffer::BindBuffer(){
-    glBindVertexArray(_bufferId);
+    GL_CHECK_CALL(glBindVertexArray(_bufferId))
 }
 
 void GLMeshBuffer::UnbindBuffer(){
-    glBindVertexArray(0);
+    GL_CHECK_CALL(glBindVertexArray(0))
 }
 
 void GLMeshBuffer::Draw(){
     CHECK(_valid && _used)
-    glBindVertexArray(_bufferId);
+    GL_CHECK_CALL(glBindVertexArray(_bufferId))
     switch(_drawType){
         case DrawType::kArray:
-            glDrawArrays(GL_TRIANGLES, 0, _triangleCount);
+            GL_CHECK_CALL(glDrawArrays(GL_TRIANGLES, 0, _triangleCount))
             break;
         case DrawType::kElement:
-            glDrawElements(GL_TRIANGLES, _triangleCount, GL_UNSIGNED_INT, 0);
+            GL_CHECK_CALL(glDrawElements(GL_TRIANGLES, _triangleCount, GL_UNSIGNED_INT, 0))
             break;
     }
-    glBindVertexArray(0);
+    GL_CHECK_CALL(glBindVertexArray(0))
 }
 
 void GLMeshBuffer::LoadData(GLBuffer::BufferData data, uint flags){

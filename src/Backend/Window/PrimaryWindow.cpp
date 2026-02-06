@@ -17,8 +17,8 @@ bool Window::Init(uint height, uint width, const char* label) {
     }
 
     glfwMakeContextCurrent(_window);
-    glfwSwapInterval(1);
-    // glfwSetInputMode(_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    glfwSwapInterval(1); // TODO: Implement some kind of scheduler that handles the render/update
+    glfwSetInputMode(_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
     return true;
 }

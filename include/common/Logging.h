@@ -16,6 +16,8 @@ void ExitLoggingBuffer();
 
 void printLog(const char* file, int line, const char* function, int severity, const char* format,...);
 
+void CerberusCheck(const char* file, int line);
+
 #define SCREAM(...) \
     printLog(__FILE__, \
     __LINE__, \
@@ -31,12 +33,14 @@ void printLog(const char* file, int line, const char* function, int severity, co
     __VA_ARGS__)
 #define CHECK(cond) do { assert(cond); } while(0);
 #else
-#define LOG(SEVERITY) // TODO fix this 
+#define LOG(...) \
+    printLog(__FILE__, \
+    __LINE__, \
+    __FUNCTION__, \
+    __VA_ARGS__) 
 #define CHECK(cond) void(0);
 #endif
 
 }
-
-// #define glCheckError() errorHandler::glCheckError_(__FILE__, __LINE__);
 
 #endif

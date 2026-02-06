@@ -19,7 +19,8 @@ bool Simulation::Run(){
 
 // Update MovementState
 void Simulation::BeginFrame(float delta){
-    _movementHandler.BeginFrame(delta);
+    _movementHandler.CheckInputManager(delta);
+    _movementHandler.UpdateMainCamera(delta);
 }
 
 void Simulation::UpdateFrame(float delta){
@@ -28,11 +29,15 @@ void Simulation::UpdateFrame(float delta){
 }
 
 void Simulation::ExitFrame(float delta){
-    _movementHandler._movementState = CAMERA_MOVEMENT::kNothing;
+    _movementHandler._movementStateFlags = 0;
 }
 
 void Simulation::SetCurrentScene(Scene* scene){
     _currentScene = scene;
+}
+
+void Simulation::UpdateCameraAspect(uint width, uint height){
+    _currentScene->_camera->AsType<Camera>()->UpdateScreenAspect(width, height);
 }
 
 }

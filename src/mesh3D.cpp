@@ -49,13 +49,6 @@ void Mesh3D::LoadTextures(){
     }
 }
 
-void Mesh3D::LoadMatrixUniforms(){
-    // _program->SetMatrix("modelMatrix", glm::value_ptr(_modelMatrice._matrix));
-    // _program->SetMatrix("viewMatrix", glm::value_ptr(_viewMatrice._matrix));
-    // _program->SetMatrix("projectionMatrix", glm::value_ptr(_projectionMatrice._matrix));
-    // _program->SetMatrix("modelInverseTransposeMatrix", glm::value_ptr(_modelInverseTransposeMatrice._matrix));
-}
-
 void Mesh3D::LoadDefaultUniforms(){
     LoadMatrixUniforms();
     // _program->SetFloat3("viewPos", _cameraPosition);
@@ -109,42 +102,4 @@ void Mesh3D::LoadDefaultUniforms(){
     // _program->SetFloat("light.cuttOf", glm::cos(glm::radians(12.5f)));
     // _program->SetFloat("light.outerCuttOf", glm::cos(glm::radians(17.5f)));
 }
-
-void Mesh3D::DrawArray(){
-    glBindVertexArray(_vao);
-    glDrawArrays(GL_TRIANGLES, 0, _count);
-    glBindVertexArray(0);
-
-    
-    ResetMatrices();
-}
-
-void Mesh3D::Draw10Cubes(){
-
-    // glBindVertexArray(_vao);
-    // for(uint index=0; index < std::size(graphic::cubePositions); index++) {
-    //     float angle = 20.f * index;
-        
-    //     _modelMatrice.Translate(graphic::cubePositions[index]);
-    //     _modelMatrice.Rotate(angle, {1.f, 0.3f, 0.5f});
-    //     _modelInverseTransposeMatrice._matrix = glm::transpose(glm::inverse(_modelMatrice._matrix));
-
-
-        // _program->SetMatrix("modelMatrix", glm::value_ptr(_modelMatrice._matrix));
-        // _program->SetMatrix("modelInverseTransposeMatrix", glm::value_ptr(_modelMatrice._matrix));
-
-    //     glDrawArrays(GL_TRIANGLES, 0, _count);
-    //     _modelMatrice.Reset();
-    // }
-    // glBindVertexArray(0);
-}
-
-void Mesh3D::ResetMatrices(){
-    _modelMatrice.Reset();
-    _modelInverseTransposeMatrice.Reset();
-    _viewMatrice.Reset();
-    _projectionMatrice.Reset();    
-}
-
-
 } // namespace graphic

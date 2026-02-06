@@ -1,6 +1,4 @@
-#include "glad/glad.h"
 #include "API/OpenGL/GLBufferManager.h"
-#include "API/OpenGL/GLBuffer.h"
 #include "Common/ConstVertices.h"
 #include "Common/Enums.h"
 

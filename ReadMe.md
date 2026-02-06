@@ -91,3 +91,4 @@ cmake --build build -- install
 - ~~Find how to create Debug/Release build~~
 - ~~Better error logs to ease the debugging process~~
 - Probably rewrite again 
+- Implement some type of scheduler, after finishing the OpenGLTutorial

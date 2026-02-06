@@ -21,8 +21,9 @@ struct InputManager {
     void UpdateKeyboardInput(int, int, int, int);
     void UpdateMouseCallback(float, float);
     void UpdateMouseScrollback(float, float);
-    bool KeyPressed(uint keycode);
-    bool KeyHold(uint keycode);
+    bool KeyPressed(uint keycode) { return  _keys[keycode-firstKeyCode].keyPressed; }
+    bool KeyHold(uint keycode) { return _keys[keycode-firstKeyCode].keyHold; }
+    bool KeyUsed(uint keycode) { return _keys[keycode-firstKeyCode].keyPressed || _keys[keycode-firstKeyCode].keyHold; }
 
 
     inline float ComputeXOffset() { return _currentWindowCoords.x - _oldWindowCoords.x; }
@@ -34,13 +35,14 @@ struct InputManager {
         uint keycode;
         bool keyPressed = false;
         bool keyHold = false;
-        bool previousPressState = false;
     };
     
     GLFWwindow* _window;
     WindowCoordinates _oldWindowCoords;
     WindowCoordinates _currentWindowCoords;
     bool _registeredMouse;
+    bool _mouseMoved;
+    bool _wheelMoved;
     std::vector<KeyBehavior> _keys;
     static constexpr uint firstKeyCode = uint(keycodes::TARTARUS_KEY_FIRST_ENTRY);
     static constexpr uint lastKeyCode = uint(keycodes::TARTARUS_KEY_LAST_ENTRY);

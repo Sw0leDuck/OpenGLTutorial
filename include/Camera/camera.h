@@ -1,6 +1,7 @@
 #ifndef CAMERA_H
 #define CAMERA_H
 #include "glm/gtc/type_ptr.hpp"
+#include "Common/Types.h"
 #include "CameraTypes.h"
 #include "Core/Objects/GameObject.h"
 
@@ -27,6 +28,8 @@ struct Camera : GameObject {
         float camera_sensitivity = SENSITIVITY,
         float camera_fov = FOV);
     
+    void UpdateScreenAspect(uint, uint);
+
     glm::mat4 LookAt();
     glm::mat4 CalculateViewMatrix();
     glm::mat4 CalculateProjectionMatrix();
@@ -54,7 +57,7 @@ struct Camera : GameObject {
     float _roll;
 
     OffsetCoordinates _offsets;
-    CAMERA_MOVEMENT _movement;
+    uint _movementFlags;
     glm::mat4 _viewMatrix;
     glm::mat4 _projMatrix;
 };

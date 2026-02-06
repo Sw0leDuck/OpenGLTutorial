@@ -16,6 +16,9 @@ struct Simulation{
     void ExitFrame(float delta);
 
     void SetCurrentScene(Scene*);
+    Camera* GetMainCamera() { return _currentScene->_camera->AsType<Camera>(); }
+
+    void UpdateCameraAspect(uint, uint);
 
     OpenGL* _gpu;
     Scene* _currentScene;

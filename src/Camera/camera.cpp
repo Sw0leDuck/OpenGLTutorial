@@ -1,3 +1,4 @@
+#include "Common/Logging.h"
 #include "Camera/Camera.h"
 #include "Common/Algorithm.h"
 
@@ -57,26 +58,31 @@ void Camera::Update(float delta){
         _cameraFront = glm::normalize(_direction);
     }
 
-    if(_movement != CAMERA_MOVEMENT::kNothing){
+    if(_movementFlags != 0){
         float modified_speed = ((float)_cameraSpeed * delta);
-        // float save__movement = _cameraFront.y;
-        // _cameraFront.y = 0;
-        switch(_movement){
-            case CAMERA_MOVEMENT::kMoveForward:
-                _position += (modified_speed * _cameraFront);
-                break;
-            case CAMERA_MOVEMENT::kMoveBackward:
-                _position -= (modified_speed * _cameraFront);
-                break;
-            case CAMERA_MOVEMENT::kMoveLeft:
-                _position -= (modified_speed * glm::cross(_cameraFront, _upVector));
-                break;
-            case CAMERA_MOVEMENT::kMoveRight:
-                _position += (modified_speed * glm::cross(_cameraFront, _upVector));
-                break;
-            default:
-                break;
+        float savedValue = _cameraFront.y;
+        _cameraFront.y = 0;
+        for(uint index=0; index<(uint)CAMERA_MOVEMENT::kCount; index++){
+            if ( (1<<index) & _movementFlags){
+                switch(CAMERA_MOVEMENT(1<<index)){
+                    case CAMERA_MOVEMENT::kMoveForward:
+                        _position += (modified_speed * _cameraFront);
+                        break;
+                    case CAMERA_MOVEMENT::kMoveBackward:
+                        _position -= (modified_speed * _cameraFront);
+                        break;
+                    case CAMERA_MOVEMENT::kMoveLeft:
+                        _position -= (modified_speed * glm::cross(_cameraFront, _upVector));
+                        break;
+                    case CAMERA_MOVEMENT::kMoveRight:
+                        _position += (modified_speed * glm::cross(_cameraFront, _upVector));
+                        break;
+                    default:
+                        break;
+                }
+            }
         }
+        _cameraFront.y = savedValue;
     }
     
     _fov -= _offsets.zOffset;
@@ -104,6 +110,10 @@ glm::mat4 Camera::GetProjection(){
 
 glm::mat4 Camera::LookAt(){
     void(0);
+}
+
+void Camera::UpdateScreenAspect(uint width, uint height){
+    _screenAspect = float(width) / float(height);
 }
 
 } // namespace view

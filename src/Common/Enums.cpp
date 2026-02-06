@@ -48,6 +48,9 @@ const char* GetAssetPathName(AssetName id){
         case AssetName::kBarrelSpecular_0:
             return "../../assets/Tartarus/BarrelSpecular_0.png";
             break;
+        case AssetName::kMonster_0:
+            return "../../assets/Tartarus/monster_0.png";
+            break;
         case AssetName::kCount:
             return "../../assets/vibe_cat.png";
             break;        

@@ -14,6 +14,7 @@ struct OpenGL {
 
     void ClearScreen();
     void UpdateViewPort(uint, uint);
+    void EnableDepthTest();
 
     GLMeshBuffer* GetMeshBuffer(BufferName id) {
         return _bufferManager->GetCreateMeshBuffer(id);

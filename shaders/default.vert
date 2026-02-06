@@ -17,4 +17,5 @@ void main(){
     Normal = mat3(modelInverseTransposeMatrix) * aNormal;
     TexCoords = aTexCoords;
     gl_Position = projectionMatrix * viewMatrix * vec4(FragPos, 1.0);
+    // gl_Position = modelMatrix * vec4(aPos, 1.0);
 }

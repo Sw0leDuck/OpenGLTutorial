@@ -36,6 +36,8 @@ bool WindowManager::Init(const char* label, uint width, uint height){
 
     _mainWindow = &_TartarusWindow;
     needResizeViewport = false;
+    _height = height;
+    _width = width;
 
     return true;
 }

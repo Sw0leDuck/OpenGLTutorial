@@ -15,25 +15,57 @@ int main(void) {
         return -1;
     
     auto gpu = realm->GetAPI();
+    realm->_gameHandler.SetFPS(60.f);
 
     // lets load the primary scene with some static cube objects
     auto& scene = realm->GetPrimaryScene();
 
     auto* camera = scene.GenerateCamera();
-    camera->Init({0,0,0});
+    camera->Init({0,0,3});
+    camera->UpdateScreenAspect(realm->_backend._windowManager._width,
+        realm->_backend._windowManager._height);
 
     // utilize the realm->_scnManagers variable to load the world
-    Static3D* object = scene.GenerateObject<Static3D>(); 
-    object->SetWorldPosition(CreateWorldPositionMatrix(0,0,0));
-    object->RotateWorldPosition(glm::radians(90.f), {0, 1, 0});
-    object->ScaleWorldPosition({10, 10, 0.2});
+    {
+        Static3D* object = scene.GenerateObject<Static3D>(); 
+        object->SetWorldPosition(CreateWorldPositionMatrix(0,-0.5f, 0));
+        object->ScaleWorldPosition({10, 0.1, 10});
 
-    object->SetMeshBuffer(
-        gpu->GetMeshBuffer(BufferName::kRectangleTextureNorm));
+        object->SetMeshBuffer(
+            gpu->GetMeshBuffer(BufferName::kRectangleTextureNorm));
 
-    object->SetShader(gpu->GetShader(ShaderName::kDefault));
+        object->SetShader(gpu->GetShader(ShaderName::kDefault));
 
-    object->InsertTexture(gpu->GetTexture(AssetName::kFloor_0));
+        object->InsertTexture(gpu->GetTexture(AssetName::kFloor_0));
+    }
+
+    {
+        Static3D* object = scene.GenerateObject<Static3D>(); 
+        object->SetWorldPosition(CreateWorldPositionMatrix(0, 0, 0));
+        object->ScaleWorldPosition({0.3, 0.3, 0.3});
+        object->TranslateWorldPosition({0,-1.f,0});
+
+        object->SetMeshBuffer(
+            gpu->GetMeshBuffer(BufferName::kRectangleTextureNorm));
+
+        object->SetShader(gpu->GetShader(ShaderName::kDefault));
+
+        object->InsertTexture(gpu->GetTexture(AssetName::kBarrel_0));
+    }
+
+    {
+        Static3D* object = scene.GenerateObject<Static3D>(); 
+        object->SetWorldPosition(CreateWorldPositionMatrix(0, 0, 0));
+        object->ScaleWorldPosition({0.3, 0.3, 0.3});
+        object->RotateWorldPosition(30.f, {0,1,0});
+
+        object->SetMeshBuffer(
+            gpu->GetMeshBuffer(BufferName::kRectangleTextureNorm));
+
+        object->SetShader(gpu->GetShader(ShaderName::kDefault));
+
+        object->InsertTexture(gpu->GetTexture(AssetName::kBarrel_0));
+    }
 
     realm->_gameHandler._simulation.SetCurrentScene(&scene);
 

@@ -10,7 +10,7 @@ struct Matrix;
 Matrix CreateWorldPositionMatrix(float, float, float);
 
 struct Matrix {
-    Matrix() {}
+    Matrix() { _matrix = glm::mat4(1.f); }
     Matrix(glm::mat4 matrix) : _matrix(matrix) {}
 
     Matrix& Rotate(float degree, glm::vec3 vec3);
