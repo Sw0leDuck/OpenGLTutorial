@@ -15,7 +15,8 @@ enum class BufferName : unsigned int {
 const char* GetBufferName(BufferName id);
 
 enum class ShaderName : unsigned int {
-    kDefault = 0
+    kDefault = 0,
+    kPointLight = 1,
 };
 
 const char* GetShaderName(ShaderName id);

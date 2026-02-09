@@ -1,12 +1,4 @@
-#include "glad/glad.h"
-#include <GLFW/glfw3.h>
-#include "mesh3D.h"
-
-
-
 namespace tartarus {
-
-Mesh3D::~Mesh3D() { }
 
 void Mesh3D::Init(){
     _modelMatrice._matrix = glm::mat4(1.0f);
@@ -23,30 +15,6 @@ void Mesh3D::Init(){
     _light._specular = glm::vec3(1.0f, 1.0f, 1.0f);
 
     _objectColor = glm::vec3(1.0f, 0.5f, 0.31f);
-}
-
-void Mesh3D::DrawIndex(){
-    for(uint32_t i=0; i<_textures2DId.size(); i++){
-        glActiveTexture(GL_TEXTURE0+i);
-        glBindTexture(_textures2DId[i].second, _textures2DId[i].first);
-    }
-
-    // _program->UseProgram();
-    // _program->SetMatrix("modelMatrix", glm::value_ptr(_modelMatrice._matrix));
-    // _program->SetMatrix("viewMatrix", glm::value_ptr(_viewMatrice._matrix));
-    // _program->SetMatrix("projectionMatrix", glm::value_ptr(_projectionMatrice._matrix));
-
-
-    glBindVertexArray(_vao);
-    glDrawElements(GL_TRIANGLES, _count, GL_UNSIGNED_INT, 0);
-    glBindVertexArray(0);
-}
-
-void Mesh3D::LoadTextures(){
-    for(uint32_t i=0; i<_textures2DId.size(); i++){
-        glActiveTexture(GL_TEXTURE0+i);
-        glBindTexture(_textures2DId[i].second, _textures2DId[i].first);
-    }
 }
 
 void Mesh3D::LoadDefaultUniforms(){
@@ -81,22 +49,6 @@ void Mesh3D::LoadDefaultUniforms(){
     // _program->SetFloat("pointLight[1].constant", 1.0f);
     // _program->SetFloat("pointLight[1].linear", 0.09f);
     // _program->SetFloat("pointLight[1].quadratic", 0.032f);
-        // point light 3
-    // _program->SetFloat3("pointLight[2].position", _pointLightPositions[2]);
-    // _program->SetFloat3("pointLight[2].ambient", 0.05f, 0.05f, 0.05f);
-    // _program->SetFloat3("pointLight[2].diffuse", 0.8f, 0.8f, 0.8f);
-    // _program->SetFloat3("pointLight[2].specular", 1.0f, 1.0f, 1.0f);
-    // _program->SetFloat("pointLight[2].constant", 1.0f);
-    // _program->SetFloat("pointLight[2].linear", 0.09f);
-    // _program->SetFloat("pointLight[2].quadratic", 0.032f);
-        // point light 4
-    // _program->SetFloat3("pointLight[3].position", _pointLightPositions[3]);
-    // _program->SetFloat3("pointLight[3].ambient", 0.05f, 0.05f, 0.05f);
-    // _program->SetFloat3("pointLight[3].diffuse", 0.8f, 0.8f, 0.8f);
-    // _program->SetFloat3("pointLight[3].specular", 1.0f, 1.0f, 1.0f);
-    // _program->SetFloat("pointLight[3].constant", 1.0f);
-    // _program->SetFloat("pointLight[3].linear", 0.09f);
-    // _program->SetFloat("pointLight[3].quadratic", 0.032f);
 
 
     // _program->SetFloat("light.cuttOf", glm::cos(glm::radians(12.5f)));

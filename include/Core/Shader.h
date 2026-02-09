@@ -14,7 +14,8 @@ struct Shader {
         kFloat = 1,
         kFloat3 = 2,
         kMatrix = 3,
-        kSampled2D = 4
+        kSampled2D = 4,
+        kNotUsed = 5
     };
 
     union UniformValue {
@@ -36,6 +37,7 @@ struct Shader {
 
     void InitUniformName(const char* name);
     void AddUniform(const char* name, std::pair<UniformType, UniformValue>);
+    void RemoveUniform(const char* name);
 
     void UseProgam();
     void UpdateUniforms();

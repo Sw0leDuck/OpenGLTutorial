@@ -1,7 +1,11 @@
 #ifndef RENDER_OBJECT_H
 #define RENDER_OBJECT_H
 #include "Core/Objects/GameObject.h"
+#include "Core/Shader.h"
 #include "Common/Types.h"
+#include "API/OpenGL/GLMeshBuffer.h"
+#include "Core/Shader.h"
+#include "API/OpenGL/GLTexture.h"
 
 namespace tartarus {
 
@@ -23,8 +27,19 @@ struct RenderObject : public GameObject {
         float _shininess;
     };
 
+    void SetMeshBuffer(GLMeshBuffer* meshBuffer);
+    void SetShader(Shader* shader) { _shader = shader; }
+    void InsertTexture(GLTexture2D* texture) { 
+        _textures.emplace_back(texture);
+    }
+
+    GLMeshBuffer* _meshBuffer;
+    Shader* _shader;
+    std::vector<GLTexture2D*> _textures;
+
     Material _material;
     vec3 _cameraPosition;
+    Shader* _primaryShader;
 };
 
 }

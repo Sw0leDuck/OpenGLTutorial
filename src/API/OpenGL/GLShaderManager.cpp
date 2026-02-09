@@ -45,6 +45,52 @@ bool GLShaderManager::Init() {
     ptr->InitUniformName("material.emission");
     ptr->InitUniformName("material.shininess");
 
+    ptr->InitUniformName("dirLight.direction");
+    ptr->InitUniformName("dirLight.ambient");
+    ptr->InitUniformName("dirLight.diffuse");
+    ptr->InitUniformName("dirLight.specular");
+
+    ptr->InitUniformName("pointLight[0].position");
+    ptr->InitUniformName("pointLight[0].ambient");
+    ptr->InitUniformName("pointLight[0].diffuse");
+    ptr->InitUniformName("pointLight[0].specular");
+    ptr->InitUniformName("pointLight[0].constant");
+    ptr->InitUniformName("pointLight[0].linear");
+    ptr->InitUniformName("pointLight[0].quadratic");
+
+    ptr->InitUniformName("pointLight[1].position");
+    ptr->InitUniformName("pointLight[1].ambient");
+    ptr->InitUniformName("pointLight[1].diffuse");
+    ptr->InitUniformName("pointLight[1].specular");
+    ptr->InitUniformName("pointLight[1].constant");
+    ptr->InitUniformName("pointLight[1].linear");
+    ptr->InitUniformName("pointLight[1].quadratic");
+
+    ptr->InitUniformName("pointLight[2].position");
+    ptr->InitUniformName("pointLight[2].ambient");
+    ptr->InitUniformName("pointLight[2].diffuse");
+    ptr->InitUniformName("pointLight[2].specular");
+    ptr->InitUniformName("pointLight[2].constant");
+    ptr->InitUniformName("pointLight[2].linear");
+    ptr->InitUniformName("pointLight[2].quadratic");
+
+    ptr->InitUniformName("pointLight[3].position");
+    ptr->InitUniformName("pointLight[3].ambient");
+    ptr->InitUniformName("pointLight[3].diffuse");
+    ptr->InitUniformName("pointLight[3].specular");
+    ptr->InitUniformName("pointLight[3].constant");
+    ptr->InitUniformName("pointLight[3].linear");
+    ptr->InitUniformName("pointLight[3].quadratic");
+
+    CompileShader(ShaderName::kPointLight, 
+        "../../shaders/default.vert", "../../shaders/light_source.frag");
+    ptr = GetShader(ShaderName::kPointLight);
+    ptr->InitUniformName("modelMatrix");
+    ptr->InitUniformName("viewMatrix");
+    ptr->InitUniformName("projectionMatrix");
+    ptr->InitUniformName("modelInverseTransposeMatrix");
+
+    ptr->InitUniformName("lightColor");
 
     return true;
 }
@@ -106,6 +152,7 @@ void GLShaderManager::CompileShader(ShaderName id,
             GL_CHECK_CALL(glDeleteShader(iter._vertexShaderId))
             GL_CHECK_CALL(glDeleteShader(iter._fragmentShaderId))
             iter.valid = false;
+            SCREAM("...");
             return;
         }
     }

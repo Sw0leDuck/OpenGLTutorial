@@ -14,8 +14,7 @@ void Shader::Reset() {
 
 void Shader::InitUniformName(const char* name){
     UniformValue x;
-    x._intValue = 10;
-    _uniforms[name] = {UniformType::kInt, x};
+    _uniforms[name] = {UniformType::kNotUsed, x};
     // _uniforms.emplace(name, std::make_pair<UniformType::kInt, x>);
 }
 
@@ -23,6 +22,12 @@ void Shader::AddUniform(const char* name,
         std::pair<UniformType, UniformValue> value){
     CHECK(_uniforms.find(name) != _uniforms.end());
     _uniforms[name] = value;
+}
+
+void Shader::RemoveUniform(const char* name){
+    CHECK(_uniforms.find(name) != _uniforms.end());
+    UniformValue x;    
+    _uniforms[name] = {UniformType::kNotUsed, x};
 }
 
 void Shader::UpdateUniforms(){
@@ -42,6 +47,8 @@ void Shader::UpdateUniforms(){
                 break;
             case UniformType::kSampled2D:
                 SetInt(iter.first.cbegin(), iter.second.second._intValue);
+                break;
+            case UniformType::kNotUsed:
                 break;
         }
     }

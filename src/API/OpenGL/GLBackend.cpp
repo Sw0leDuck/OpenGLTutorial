@@ -43,7 +43,7 @@ bool OpenGL::Exit(){
 
 
 void OpenGL::ClearScreen(){
-    GL_MAKE_CALL(glClearColor(0.2, 0.4, 0.6, 1.0))
+    GL_MAKE_CALL(glClearColor(0, 0, 0, 0))
     GL_MAKE_CALL(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT))
 }
 

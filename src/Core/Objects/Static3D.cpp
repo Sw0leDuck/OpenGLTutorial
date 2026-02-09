@@ -6,8 +6,8 @@ bool Static3D::Init(){
     _type = Type::kStatic;
     _meshBuffer = nullptr;
     _shader = nullptr;
-    _material._ambient = {0.2125, 0.1275, 0.054};
-    _material._shininess = 16.0f;
+    _material._ambient = {0.1, 0.1, 0.1};
+    _material._shininess = 32.0f;
     return true;
 }
 
@@ -23,13 +23,6 @@ void Static3D::Draw(float){
     _shader->UseProgam();
     _meshBuffer->Draw();
     _shader->Reset();
-}
-
-void Static3D::SetMeshBuffer(GLMeshBuffer* meshBuffer) {
-    if(_meshBuffer)
-        _meshBuffer->_used = false;
-    _meshBuffer = meshBuffer;
-    _meshBuffer->_used = true;
 }
 
 void Static3D::Update(float){

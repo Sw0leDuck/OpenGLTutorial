@@ -26,6 +26,9 @@ add_executable(OpenGLTutorial
     src/Common/Matrix.cpp
     src/Core/Objects/Static3D.cpp
     src/Core/Objects/GameObject.cpp
+    src/Core/Objects/DirectLight.cpp
+    src/Core/Objects/PointLight.cpp
+    src/Core/Objects/RenderObject.cpp
     src/Core/GameHandler.cpp
     src/Core/MovementStateManager.cpp
     src/Core/Scene.cpp

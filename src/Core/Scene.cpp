@@ -1,4 +1,5 @@
 #include "Core/Scene.h"
+#include "Core/Objects/Light.h"
 #include "Core/Objects/RenderObject.h"
 
 namespace tartarus {
@@ -14,6 +15,11 @@ bool Scene::Exit(){
 Camera* Scene::GenerateCamera(){
     _camera = std::make_unique<Camera>();
     return _camera->AsType<Camera>();
+}
+
+GameObject* Scene::GenerateMainLight(){
+    _mainLight = std::make_unique<DirectLight>();
+    return _mainLight.get();
 }
 
 void Scene::UpdateFrame(float delta){
@@ -52,7 +58,28 @@ void Scene::UpdateCamera(float delta){
 }
 
 void Scene::SimulateLights(float delta){
+    static float counter = 0; 
 
+    auto viewMatrix = _camera->AsType<Camera>()->GetView();
+    auto projMatrix = _camera->AsType<Camera>()->GetProjection();
+
+    _mainLight->Update(delta);
+
+    for(auto& iter : _lights){
+        iter->_viewMatrix = viewMatrix;
+        iter->_projectionMatrix = projMatrix;
+
+        iter->AsType<PointLight>()->SetPosition(
+            Matrix().Translate(
+            {glm::sin(counter), 0, glm::cos(counter)})
+            .Scale({0.3, 0.3, 0.3})
+        );
+
+        iter->Update(delta);
+        iter->Draw(delta);
+    }
+
+    counter += 0.0025f;
 }
 
 
