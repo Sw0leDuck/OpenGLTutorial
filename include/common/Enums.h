@@ -6,10 +6,12 @@ namespace tartarus {
 enum class BufferName : unsigned int {
     kRectangleColor = 0,
     kRectangleTexture = 1,
-    kRectangleTextureNorm = 2,
+    kRectangleTextureNormInstanced = 2,
     kTriangleColor = 3,
     kTriangleTexture = 4,
-    kTriangleTextureNorm = 5
+    kTriangleTextureNorm = 5,
+    kCubeTexture = 6,
+    kCubeTextureNorm = 7
 };
 
 const char* GetBufferName(BufferName id);
@@ -17,6 +19,7 @@ const char* GetBufferName(BufferName id);
 enum class ShaderName : unsigned int {
     kDefault = 0,
     kPointLight = 1,
+    kInstanced = 2
 };
 
 const char* GetShaderName(ShaderName id);

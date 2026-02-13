@@ -8,7 +8,7 @@ const char* GetBufferName(BufferName id){
             return "RectangleColor";
         case BufferName::kRectangleTexture:
             return "RectangleTexture";
-        case BufferName::kRectangleTextureNorm:
+        case BufferName::kRectangleTextureNormInstanced:
             return "RectangleTextureNorm";
         case BufferName::kTriangleColor:
             return "TriangleColor";
@@ -16,6 +16,10 @@ const char* GetBufferName(BufferName id){
             return "TriangleTexture";
         case BufferName::kTriangleTextureNorm:
             return "TriangleTextureNorm";
+        case BufferName::kCubeTexture:
+            return "CubeTexture";
+        case BufferName::kCubeTextureNorm:
+            return "CubeTextureNorm";
     }
     return "Check Enums.cpp";
 }

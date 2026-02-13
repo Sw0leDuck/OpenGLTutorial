@@ -15,9 +15,11 @@ struct GLBufferManager {
     GLBuffer* GetGpuArrayBuffer(BufferName);
     GLBuffer* GetGpuIndexBuffer(BufferName);
     GLMeshBuffer* GetCreateMeshBuffer(BufferName);
+    GLBuffer* GetCreateInstanceBuffer(int);
 
     std::unordered_map<BufferName, GLBuffer> _vertexBuffers;
     std::unordered_map<BufferName, GLBuffer> _indexBuffers;
+    std::unordered_map<int, GLBuffer> _instancedBuffers;
     std::unordered_map<BufferName, GLMeshBuffer> _meshBuffers;
 };
 

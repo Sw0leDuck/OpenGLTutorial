@@ -33,7 +33,7 @@ int main(void) {
         object->ScaleWorldPosition({10, 0.1, 10});
 
         object->SetMeshBuffer(
-            gpu->GetMeshBuffer(BufferName::kRectangleTextureNorm));
+            gpu->GetMeshBuffer(BufferName::kCubeTextureNorm));
 
         object->SetShader(gpu->GetShader(ShaderName::kDefault));
 
@@ -47,7 +47,7 @@ int main(void) {
         object->TranslateWorldPosition({0,-1.f,0});
 
         object->SetMeshBuffer(
-            gpu->GetMeshBuffer(BufferName::kRectangleTextureNorm));
+            gpu->GetMeshBuffer(BufferName::kCubeTextureNorm));
 
         object->SetShader(gpu->GetShader(ShaderName::kDefault));
 
@@ -62,7 +62,7 @@ int main(void) {
         object->RotateWorldPosition(30.f, {0,1,0});
 
         object->SetMeshBuffer(
-            gpu->GetMeshBuffer(BufferName::kRectangleTextureNorm));
+            gpu->GetMeshBuffer(BufferName::kCubeTextureNorm));
 
         object->SetShader(gpu->GetShader(ShaderName::kDefault));
 
@@ -77,7 +77,7 @@ int main(void) {
         object->TranslateWorldPosition({0,-1.f,0});
 
         object->SetMeshBuffer(
-            gpu->GetMeshBuffer(BufferName::kRectangleTextureNorm));
+            gpu->GetMeshBuffer(BufferName::kCubeTextureNorm));
 
         object->SetShader(gpu->GetShader(ShaderName::kDefault));
 
@@ -90,7 +90,7 @@ int main(void) {
         light->AttachShader(gpu->GetShader(ShaderName::kDefault));
         light->SetDirection({-0.2f,-1,-0.3f});
         light->SetAmbient({0.001f,0.001f,0.001f});
-        light->SetDiffuse({0.5f,0.5f,0.5f});
+        light->SetDiffuse({0.1f,0.1f,0.1f});
         light->SetSpecular({1.f,1.f,1.f});
         light->Update();
     }
@@ -103,14 +103,14 @@ int main(void) {
         light->SetIndex(0);
         light->AttachShader(gpu->GetShader(ShaderName::kDefault));
         light->SetShader(gpu->GetShader(ShaderName::kPointLight));
-        light->SetAmbient({0.05f,0.05f,0.05f});
-        light->SetDiffuse({0.8f,0.8f,0.8f});
+        light->SetAmbient({0.8f,0.8f,0.8f});
+        light->SetDiffuse({0.9f,0.9f,0.9f});
         light->SetSpecular({1.f,1.f,1.f});
-        light->SetAttenuation(2); // 0-11 value
+        light->SetAttenuation(1); // 0-11 value
         light->Update();
 
         light->SetMeshBuffer(
-            gpu->GetMeshBuffer(BufferName::kRectangleTextureNorm));
+            gpu->GetMeshBuffer(BufferName::kCubeTextureNorm));
     }
 
     realm->_gameHandler._simulation.SetCurrentScene(&scene);

@@ -22,21 +22,25 @@ struct GLBuffer {
     struct BufferData {
         BufferData(
             void* vertices = nullptr, 
-            uint verSize = -1,
+            uint verSize = 0,
             void* indices = nullptr,
-            uint indexSize = -1,
-            bool mallocUse = false) : 
+            uint indexSize = 0,
+            bool mallocUse = false,
+            int instanceCount = -1) : 
         _vertices(vertices), 
         _vertSize(verSize),
         _indices(indices),
         _indexSize(indexSize),
-        _mallocUsed(mallocUse) {}
+        _mallocUsed(mallocUse),
+        _instanceCount(instanceCount) {}
 
         void* _vertices = nullptr;
-        uint _vertSize = -1;
+        uint _vertSize = 0;
 
         void* _indices = nullptr;
-        uint _indexSize = -1;
+        uint _indexSize = 0;
+
+        int _instanceCount = 0;
 
         bool _mallocUsed = false;
     };

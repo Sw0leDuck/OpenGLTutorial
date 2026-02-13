@@ -70,13 +70,11 @@ void Scene::SimulateLights(float delta){
         iter->_projectionMatrix = projMatrix;
 
         iter->AsType<PointLight>()->SetPosition(
-            Matrix().Translate(
-            {glm::sin(counter), 0, glm::cos(counter)})
-            .Scale({0.3, 0.3, 0.3})
+            Matrix().Translate(_camera->AsType<Camera>()->_position)
         );
 
         iter->Update(delta);
-        iter->Draw(delta);
+        // iter->Draw(delta);
     }
 
     counter += 0.0025f;

@@ -4,18 +4,16 @@
 
 namespace tartarus {
 
-void SetVertexAttribute(bool set, uint& index, uint size, 
+void SetVertexAttribute(uint& index, uint size, 
             uint type, uint normalized, 
             uint stride, uint& offset){
-    if(set){
-        GL_CHECK_CALL(glVertexAttribPointer(index, size, type, normalized, stride, 
-            (void*)((ull)offset)))
-        GL_CHECK_CALL(glEnableVertexAttribArray(index))
-        index++;
-        // Hardcoded float value, up to now, the only
-        // type passed is GL_FLOAT
-        offset += (size * sizeof(float));
-    }
+    GL_CHECK_CALL(glVertexAttribPointer(index, size, type, normalized, stride, 
+        (void*)((ull)offset)))
+    GL_CHECK_CALL(glEnableVertexAttribArray(index))
+    index++;
+    // Hardcoded float value, up to now, the only
+    // type passed is GL_FLOAT
+    offset += (size * sizeof(float));
 }
 
 uint ComputeStrideFromFlags(uint flags){
@@ -75,6 +73,20 @@ void GLMeshBuffer::Draw(){
     GL_CHECK_CALL(glBindVertexArray(0))
 }
 
+void GLMeshBuffer::DrawInstanced(uint count){
+    CHECK(_valid && _used)
+    GL_CHECK_CALL(glBindVertexArray(_bufferId))
+    switch(_drawType){
+        case DrawType::kArray:
+            GL_CHECK_CALL(glDrawArraysInstanced(GL_TRIANGLES, 0, _triangleCount, count))
+            break;
+        case DrawType::kElement:
+            GL_CHECK_CALL(glDrawElements(GL_TRIANGLES, _triangleCount, GL_UNSIGNED_INT, 0))
+            break;
+    }
+    GL_CHECK_CALL(glBindVertexArray(0))
+}
+
 void GLMeshBuffer::LoadData(GLBuffer::BufferData data, uint flags){
     this->BindBuffer();
         
@@ -94,26 +106,67 @@ void GLMeshBuffer::LoadData(GLBuffer::BufferData data, uint flags){
         _drawType = DrawType::kElement;
     }
 
+    // interesting code??? wtf is goind on here
+    // it will work for the case of only creating a vertex mesh buffer
+    // what about the element one?
     for(auto& iter : _buffers)
         iter->BindBuffer();
 
     uint stride = ComputeStrideFromFlags(flags);
     uint index = 0, offset = 0;
 
-    for(uint j=0; j<(uint)VertexAttributeFlag::kCount; j++){
-        // kTexCoords is represented only with 2 floats
-        // all the others attributes need 3
-        uint size = j == 3  ? 2 : 3;
-        SetVertexAttribute(flags & (uint)(1<<j),
-            index, 
-            size, 
-            GL_FLOAT, 
-            GL_FALSE, 
-            stride, 
-            offset);
+    if(flags & (uint)VertexAttributeFlag::kPos)
+        SetVertexAttribute(index, 3, GL_FLOAT, GL_FALSE, stride, offset);
+
+    if(flags & (uint)VertexAttributeFlag::kNormalVector)
+        SetVertexAttribute(index, 3, GL_FLOAT, GL_FALSE, stride, offset);
+
+    if(flags & (uint)VertexAttributeFlag::kColor)
+        SetVertexAttribute(index, 3, GL_FLOAT, GL_FALSE, stride, offset);
+
+    if(flags & (uint)VertexAttributeFlag::kTextCoords)
+        SetVertexAttribute(index, 2, GL_FLOAT, GL_FALSE, stride, offset);
+    
+    if(flags & (uint)VertexAttributeFlag::kInstanceValues){
+        uint tmp = 0;
+        _buffers.emplace_back(_bufferManager->GetCreateInstanceBuffer(data._instanceCount));
+
+        auto iter = _buffers.back();
+        // malloc ?
+        // _vertices is not longer used in this point
+        data._vertSize = sizeof(vec3)*data._instanceCount*data._instanceCount;
+        data._vertices = (vec3*)malloc(data._vertSize);
+        // let the function free the buffer
+        data._mallocUsed = true;
+
+        // build the buffer
+        {
+            vec3* bufferData = reinterpret_cast<vec3*>(data._vertices);
+            for(int z=-data._instanceCount; z<data._instanceCount; z+=2){
+                for(int x=-data._instanceCount; x<data._instanceCount; x+=2){
+                    bufferData->x = (float)x / 10.0f + offset;;
+                    bufferData->y = 0;
+                    bufferData->z = (float)z / 10.0f + offset;;
+                    bufferData++;
+                }
+            }
+
+            iter->_bufferData = data;
+            iter->LoadArrayBuffer(GL_STATIC_DRAW);
+            _drawType = DrawType::kArray;
+
+            data._mallocUsed = false; // in case we insert something down the line
+        }
+
+        iter->BindBuffer();
+
+        SetVertexAttribute(index, 2, GL_FLOAT, GL_FALSE, 2*sizeof(float), tmp);
+        // index-1 because index was increased above
+        GL_CHECK_CALL(glVertexAttribDivisor(index-1, 1))
+        iter->UnbindBuffer();
     }
 
-    _triangleCount = data._indexSize != -1 ? 
+    _triangleCount = data._indexSize != 0 ? 
         data._indexSize/sizeof(uint) : 
         data._vertSize / stride;
     

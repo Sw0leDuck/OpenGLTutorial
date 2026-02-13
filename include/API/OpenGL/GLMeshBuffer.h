@@ -17,7 +17,8 @@ enum VertexAttributeFlag {
     kNormalVector = (1<<1), // 3
     kColor = (1<<2), // 3
     kTextCoords = (1<<3), // 2
-    kCount = 4,
+    kInstanceValues = (1<<4), // 2
+    kCount = 5,
     kAll = (kColor<<1)-1
 };
 
@@ -34,6 +35,7 @@ struct GLMeshBuffer {
     void BindBuffer();
     void UnbindBuffer();
     void Draw();
+    void DrawInstanced(uint);
     void LoadData(GLBuffer::BufferData data, uint flags);
 
     uint _bufferId;

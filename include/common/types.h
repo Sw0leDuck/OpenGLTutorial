@@ -26,6 +26,11 @@ struct vec3 {
     float z;
 };
 
+struct vec2 {
+    float x;
+    float y;
+};
+
 struct mat4 {
     float values[16];
 };

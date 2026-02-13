@@ -10,18 +10,27 @@ bool GLBufferManager::Init(){
     _vertexBuffers.reserve(10);
     _indexBuffers.reserve(10);
     _meshBuffers.reserve(10);
+    _instancedBuffers.reserve(10);
 
     // lets allocate some important buffers
-    GetCreateMeshBuffer(BufferName::kRectangleTextureNorm)->LoadData(
+    GetCreateMeshBuffer(BufferName::kCubeTextureNorm)->LoadData(
         {(void*)vertices::CubeNormTexture, sizeof(vertices::CubeNormTexture)},
         VertexAttributeFlag::kPos | 
         VertexAttributeFlag::kNormalVector | 
         VertexAttributeFlag::kTextCoords);
 
-    GetCreateMeshBuffer(BufferName::kRectangleTexture)->LoadData(
+    GetCreateMeshBuffer(BufferName::kCubeTexture)->LoadData(
         {(void*)vertices::CubeTexture, sizeof(vertices::CubeTexture)},
         VertexAttributeFlag::kPos | 
-        VertexAttributeFlag::kTextCoords);    
+        VertexAttributeFlag::kTextCoords);
+
+    GetCreateMeshBuffer(BufferName::kRectangleTextureNormInstanced)->LoadData(
+        {(void*)vertices::RectangleTextureNorm, sizeof(vertices::RectangleTextureNorm),
+        nullptr, 0, false, 10},
+        VertexAttributeFlag::kPos | 
+        VertexAttributeFlag::kNormalVector |
+        VertexAttributeFlag::kTextCoords |
+        VertexAttributeFlag::kInstanceValues); 
 
     return true;
 }
@@ -36,6 +45,11 @@ bool GLBufferManager::Exit(){
         iter.second.Exit();
     }
     _indexBuffers.clear();
+
+    for(auto& iter : _instancedBuffers){
+        iter.second.Exit();
+    }
+    _instancedBuffers.clear();
 
     for(auto& iter : _meshBuffers){
         iter.second.Exit();
@@ -78,6 +92,16 @@ GLMeshBuffer* GLBufferManager::GetCreateMeshBuffer(BufferName id){
         return &pair.first->second;
     }
     return &iter->second;
+}
+
+GLBuffer* GLBufferManager::GetCreateInstanceBuffer(int count){
+    auto iter = _instancedBuffers.find(count);
+    if(iter != _instancedBuffers.end())
+        return &iter->second;
+
+    auto elem = &_instancedBuffers.emplace(count, GLBuffer()).first->second;
+    elem->Init(GLBuffer::BufferType::kArrayBuffer);
+    return elem;
 }
 
 }
