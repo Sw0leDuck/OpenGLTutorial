@@ -1,8 +1,11 @@
 #include "App/Realm.h"
+#include "Core/Objects/FlatGridMap.h"
 #include "Core/Objects/Light.h"
 #include "stdlib.h"
 #include "Core/Objects/Static3D.h"
 #include "Camera/Camera.h"
+
+#include "imgui.h"
 
 namespace tartarus{
 
@@ -28,14 +31,14 @@ int main(void) {
 
     // utilize the realm->_scnManagers variable to load the world
     {
-        Static3D* object = scene.GenerateObject<Static3D>();
-        object->SetWorldPosition(CreateWorldPositionMatrix(0,-0.5f, 0));
-        object->ScaleWorldPosition({10, 0.1, 10});
+        FlatGridMap* object = scene.GenerateObject<FlatGridMap>();
+        object->_instanceCount = 8*8;
+        object->SetWorldPosition(CreateWorldPositionMatrix(0, -.5f, 0));
 
         object->SetMeshBuffer(
-            gpu->GetMeshBuffer(BufferName::kCubeTextureNorm));
+            gpu->GetMeshBuffer(BufferName::kRectangleTextureNormInstanced));
 
-        object->SetShader(gpu->GetShader(ShaderName::kDefault));
+        object->SetShader(gpu->GetShader(ShaderName::kInstanced));
 
         object->InsertTexture(gpu->GetTexture(AssetName::kFloor_0));
     }
@@ -43,8 +46,8 @@ int main(void) {
     {
         Static3D* object = scene.GenerateObject<Static3D>(); 
         object->SetWorldPosition(CreateWorldPositionMatrix(0, 0, 0));
+        object->TranslateWorldPosition({0,-1.f/6.f,0});
         object->ScaleWorldPosition({0.3, 0.3, 0.3});
-        object->TranslateWorldPosition({0,-1.f,0});
 
         object->SetMeshBuffer(
             gpu->GetMeshBuffer(BufferName::kCubeTextureNorm));
@@ -88,6 +91,7 @@ int main(void) {
     {
         DirectLight* light = scene.GenerateMainLight()->AsType<DirectLight>();
         light->AttachShader(gpu->GetShader(ShaderName::kDefault));
+        light->AttachShader(gpu->GetShader(ShaderName::kInstanced));
         light->SetDirection({-0.2f,-1,-0.3f});
         light->SetAmbient({0.001f,0.001f,0.001f});
         light->SetDiffuse({0.1f,0.1f,0.1f});
@@ -102,6 +106,7 @@ int main(void) {
         light->ScaleWorldPosition({0.1f, 0.1f, 0.1f});
         light->SetIndex(0);
         light->AttachShader(gpu->GetShader(ShaderName::kDefault));
+        light->AttachShader(gpu->GetShader(ShaderName::kInstanced));
         light->SetShader(gpu->GetShader(ShaderName::kPointLight));
         light->SetAmbient({0.8f,0.8f,0.8f});
         light->SetDiffuse({0.9f,0.9f,0.9f});
@@ -115,7 +120,12 @@ int main(void) {
 
     realm->_gameHandler._simulation.SetCurrentScene(&scene);
 
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+
     realm->_gameHandler.GameLoop();
+
+    ImGui::DestroyContext();
 
     // if everything went well, then call exit function
     return realm->Exit() ? 0 : -1;

@@ -85,10 +85,15 @@ cmake --build build -- install
 # Move new folder to C:/Lib
 ```
 
+## ImGui
+
+Clone the official 
+
 # TODO
 
 - ~~Continue to second section ( Lighting )~~
 - ~~Find how to create Debug/Release build~~
 - ~~Better error logs to ease the debugging process~~
-- Probably rewrite again 
+- ~~Probably rewrite again~~ 
+- ImGUI is currently installed on C:/Lib folder, should i move it into the project?
 - Implement some type of scheduler, after finishing the OpenGLTutorial

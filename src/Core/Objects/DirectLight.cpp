@@ -12,7 +12,7 @@ bool DirectLight::Exit(){
 }
 
 void DirectLight::AttachShader(Shader* ptr){
-    _shaderPtr = ptr;
+    _shaders.emplace_back(ptr);
 }
 
 void DirectLight::Update(float delta){
@@ -21,21 +21,23 @@ void DirectLight::Update(float delta){
     if(!_update)
         return;
 
-    x._f3Value = _direction; 
-    _shaderPtr->AddUniform("dirLight.direction", 
-        {Shader::UniformType::kFloat3, x});
-
-    x._f3Value = _lightProperties._ambient;
-    _shaderPtr->AddUniform("dirLight.ambient", 
-        {Shader::UniformType::kFloat3, x});
-
-    x._f3Value = _lightProperties._diffuse;
-    _shaderPtr->AddUniform("dirLight.diffuse", 
-        {Shader::UniformType::kFloat3, x});
-
-    x._f3Value = _lightProperties._specular;
-    _shaderPtr->AddUniform("dirLight.specular", 
-        {Shader::UniformType::kFloat3, x});
+    for(auto iter : _shaders){
+        x._f3Value = _direction; 
+        iter->AddUniform("dirLight.direction", 
+            {Shader::UniformType::kFloat3, x});
+    
+        x._f3Value = _lightProperties._ambient;
+        iter->AddUniform("dirLight.ambient", 
+            {Shader::UniformType::kFloat3, x});
+    
+        x._f3Value = _lightProperties._diffuse;
+        iter->AddUniform("dirLight.diffuse", 
+            {Shader::UniformType::kFloat3, x});
+    
+        x._f3Value = _lightProperties._specular;
+        iter->AddUniform("dirLight.specular", 
+            {Shader::UniformType::kFloat3, x});
+    }
 
     _update = false;
 }

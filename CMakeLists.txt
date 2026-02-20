@@ -6,6 +6,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 find_package(glfw3 CONFIG REQUIRED)
 find_package(glm CONFIG REQUIRED)
 add_subdirectory(C:/Lib/glad  ${CMAKE_CURRENT_BINARY_DIR}/glad_library EXCLUDE_FROM_ALL)
+add_subdirectory(C:/Lib/imgui  ${CMAKE_CURRENT_BINARY_DIR}/imgui_library EXCLUDE_FROM_ALL)
 
 add_executable(OpenGLTutorial 
     src/API/OpenGL/GLBackend.cpp
@@ -17,7 +18,6 @@ add_executable(OpenGLTutorial
     src/API/OpenGL/GLTextureManager.cpp
     src/App/main.cpp
     src/App/Realm.cpp
-    # src/Asset/asset_manager.cpp
     src/Backend/Window/PrimaryWindow.cpp
     src/Backend/Backend.cpp
     src/Camera/Camera.cpp
@@ -28,6 +28,7 @@ add_executable(OpenGLTutorial
     src/Core/Objects/GameObject.cpp
     src/Core/Objects/DirectLight.cpp
     src/Core/Objects/PointLight.cpp
+    src/Core/Objects/FlatGridMap.cpp
     src/Core/Objects/RenderObject.cpp
     src/Core/GameHandler.cpp
     src/Core/MovementStateManager.cpp
@@ -38,17 +39,9 @@ add_executable(OpenGLTutorial
     src/Managers/InputManager.cpp
     src/Managers/SceneManager.cpp
     src/Managers/WindowManager.cpp
-    # src/glsl_compiler.cpp
-    # src/image_loader.cpp
-    # src/matrix.cpp
-    # src/mesh3D.cpp
-    # src/mesh_manager.cpp
-    # src/renderer.cpp
-    # src/texture.cpp
-    # src/texture_manager.cpp
     )
 
 target_include_directories(OpenGLTutorial PUBLIC include)
 target_include_directories(OpenGLTutorial PUBLIC third_party)
 
-target_link_libraries(OpenGLTutorial PRIVATE glfw PUBLIC glad PRIVATE glm::glm)
+target_link_libraries(OpenGLTutorial PRIVATE glfw PUBLIC glad PRIVATE glm::glm PUBLIC imgui)

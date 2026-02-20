@@ -97,10 +97,10 @@ bool GLShaderManager::Init() {
 
     // ####################################################################
 
-    CompileShader(ShaderName::kDefault, 
+    CompileShader(ShaderName::kInstanced, 
         "../../shaders/defaultInstanced.vert", "../../shaders/default.frag");
     
-    ptr = GetShader(ShaderName::kDefault);
+    ptr = GetShader(ShaderName::kInstanced);
     ptr->InitUniformName("modelMatrix");
     ptr->InitUniformName("viewMatrix");
     ptr->InitUniformName("projectionMatrix");
@@ -243,7 +243,7 @@ void GLShaderManager::CompileShader(ShaderName id,
 Shader* GLShaderManager::GetShader(ShaderName id){
     auto iter = _shaders.find(id);
     if(iter == _shaders.end())
-        SCREAM("Shader %s not found\n", GetShader(id));
+        SCREAM("Shader %s not found\n", GetShaderName(id));
     return &iter->second;
 }
 

@@ -32,7 +32,7 @@ struct PointLight : RenderObject {
     void SetDiffuse(vec3);
     void SetSpecular(vec3);
 
-    Shader* _attachedShader;
+    std::vector<Shader*> _shaders;
 
     vec3 _position;
     MaterialLight _lightProperties;
@@ -64,7 +64,7 @@ struct DirectLight : GameObject {
 
     // for not we only have 1 giga shader, this
     // will probably change
-    Shader* _shaderPtr;
+    std::vector<Shader*> _shaders;
 
     vec3 _direction;
     MaterialLight _lightProperties;

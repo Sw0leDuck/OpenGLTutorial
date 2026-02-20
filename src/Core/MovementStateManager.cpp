@@ -24,6 +24,10 @@ void MovementStateManager::CheckInputManager(float delta){
         _stopSimulation = true;
     }
 
+    if(_inputManager->KeyPressed((uint)keycodes::TARTARUS_KEY_P)){
+        _stopSimulation = true;
+    }
+
     // Movement state important keys
     if(_inputManager->KeyUsed((uint)keycodes::TARTARUS_KEY_W)){
         _movementStateFlags |= (uint)CAMERA_MOVEMENT::kMoveForward;

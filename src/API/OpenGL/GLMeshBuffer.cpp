@@ -144,9 +144,9 @@ void GLMeshBuffer::LoadData(GLBuffer::BufferData data, uint flags){
             vec3* bufferData = reinterpret_cast<vec3*>(data._vertices);
             for(int z=-data._instanceCount; z<data._instanceCount; z+=2){
                 for(int x=-data._instanceCount; x<data._instanceCount; x+=2){
-                    bufferData->x = (float)x / 10.0f + offset;;
+                    bufferData->x = ((float)x / (float)2.f);
                     bufferData->y = 0;
-                    bufferData->z = (float)z / 10.0f + offset;;
+                    bufferData->z = ((float)z / (float)2.f);
                     bufferData++;
                 }
             }
@@ -159,8 +159,8 @@ void GLMeshBuffer::LoadData(GLBuffer::BufferData data, uint flags){
         }
 
         iter->BindBuffer();
-
-        SetVertexAttribute(index, 2, GL_FLOAT, GL_FALSE, 2*sizeof(float), tmp);
+        
+        SetVertexAttribute(index, 3, GL_FLOAT, GL_FALSE, 3*sizeof(float), tmp);
         // index-1 because index was increased above
         GL_CHECK_CALL(glVertexAttribDivisor(index-1, 1))
         iter->UnbindBuffer();

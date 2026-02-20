@@ -28,6 +28,10 @@ const char* GetShaderName(ShaderName id){
     switch(id){
         case ShaderName::kDefault:
             return "Default";
+        case ShaderName::kPointLight:
+            return "PointLight";
+        case ShaderName::kInstanced:
+            return "Instanced";
     }
     return "Check Enums.cpp";
 }

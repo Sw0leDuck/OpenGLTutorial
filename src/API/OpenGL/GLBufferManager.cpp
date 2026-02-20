@@ -26,7 +26,7 @@ bool GLBufferManager::Init(){
 
     GetCreateMeshBuffer(BufferName::kRectangleTextureNormInstanced)->LoadData(
         {(void*)vertices::RectangleTextureNorm, sizeof(vertices::RectangleTextureNorm),
-        nullptr, 0, false, 10},
+        nullptr, 0, false, 8},
         VertexAttributeFlag::kPos | 
         VertexAttributeFlag::kNormalVector |
         VertexAttributeFlag::kTextCoords |
