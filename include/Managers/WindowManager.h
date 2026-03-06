@@ -2,6 +2,7 @@
 #define WINDOW_MANAGER_H
 
 #include "Backend/Window/PrimaryWindow.h"
+#include "Backend/Editor/Editor.h"
 #include "Managers/InputManager.h"
 
 namespace tartarus{
@@ -22,6 +23,8 @@ struct WindowManager {
         uint heigth = HEIGHT);
     
     bool Exit();
+
+    void StartEditor();
     
     // inline bool Closed() { return glfwWindowShouldClose(_window); }
     // inline void SwapBuffers() { glfwSwapBuffers(_window); }
@@ -29,6 +32,7 @@ struct WindowManager {
     void ProcessInput(float delta_time);
 
     glfw::Window _TartarusWindow;
+    imgui::Editor _gameEditor;
     glfw::Window* _mainWindow;
     InputManager _inputManager;
 

@@ -50,9 +50,15 @@ void GameHandler::PreFrame(){
     }
     
     _simulation._gpu->ClearScreen();
+#ifdef TARTARUS_EDITOR
+    _windowManager->_gameEditor.PreFrame();
+#endif
 }
 
 void GameHandler::PostFrame(){
+#ifdef TARTARUS_EDITOR
+    _windowManager->_gameEditor.PostFrame();
+#endif
     _windowManager->_mainWindow->EndFrameWork();
 }
 

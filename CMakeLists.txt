@@ -3,6 +3,11 @@ project(OpenGLTutorial VERSION 0.1.0 LANGUAGES C CXX)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+option(TARTARUS_EDITOR "Use editor in debug mode" ON)
+if(TARTARUS_EDITOR)
+    add_definitions(-DTARTARUS_EDITOR)
+endif()
+
 find_package(glfw3 CONFIG REQUIRED)
 find_package(glm CONFIG REQUIRED)
 add_subdirectory(C:/Lib/glad  ${CMAKE_CURRENT_BINARY_DIR}/glad_library EXCLUDE_FROM_ALL)
@@ -19,6 +24,7 @@ add_executable(OpenGLTutorial
     src/App/main.cpp
     src/App/Realm.cpp
     src/Backend/Window/PrimaryWindow.cpp
+    src/Backend/Editor/Editor.cpp
     src/Backend/Backend.cpp
     src/Camera/Camera.cpp
     src/Common/Logging.cpp

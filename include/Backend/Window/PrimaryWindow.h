@@ -12,6 +12,8 @@ namespace tartarus::glfw {
 
         void EndFrameWork();
 
+        void EditorLoaded();
+
         GLFWwindow* _window;
         uint _height;
         uint _width;

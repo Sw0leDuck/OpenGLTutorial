@@ -33,6 +33,10 @@ void Window::EndFrameWork(){
     glfwPollEvents();
 }
 
+void Window::EditorLoaded(){
+    glfwSetInputMode(_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+}
+
 // void BeginFrame(float delta_time){
 //     g_window_manager.ProcessInput(delta_time);
 // }

@@ -5,8 +5,6 @@
 #include "Core/Objects/Static3D.h"
 #include "Camera/Camera.h"
 
-#include "imgui.h"
-
 namespace tartarus{
 
 int main(void) {
@@ -19,6 +17,9 @@ int main(void) {
         return -1;
     
     auto gpu = realm->GetAPI();
+#ifdef TARTARUS_EDITOR
+    realm->_backend.LoadEditor();
+#endif
     realm->_gameHandler.SetFPS(60.f);
 
     // lets load the primary scene with some static cube objects
@@ -120,12 +121,7 @@ int main(void) {
 
     realm->_gameHandler._simulation.SetCurrentScene(&scene);
 
-    IMGUI_CHECKVERSION();
-    ImGui::CreateContext();
-
     realm->_gameHandler.GameLoop();
-
-    ImGui::DestroyContext();
 
     // if everything went well, then call exit function
     return realm->Exit() ? 0 : -1;

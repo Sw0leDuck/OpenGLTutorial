@@ -46,7 +46,18 @@ bool WindowManager::Exit(){
     _mainWindow = nullptr;
     if(!_TartarusWindow.Exit())
         return false;
+    if(!_gameEditor.Exit())
+        return false;
     return true;
+}
+
+void WindowManager::StartEditor(){
+    _gameEditor.Init(_TartarusWindow._window);
+    _TartarusWindow.EditorLoaded();
+    // TODO: all of these need to be logged behind a key ( E for editor ? )
+    // glfwSetCursorPosCallback(_TartarusWindow._window, NULL);
+    // glfwSetScrollCallback(_TartarusWindow._window, NULL);
+    // glfwSetKeyCallback(_TartarusWindow._window, NULL);
 }
 
 void WindowManager::ProcessInput(float delta_time) {
@@ -85,6 +96,10 @@ void FramebufferSizeCallback(GLFWwindow* window, int width, int height){
 }
 
 void MouseCallback(GLFWwindow* window, double xposIn, double yposIn){
+#if TARTARUS_EDITOR
+    if(global::g_WindowManager->_gameEditor._used)
+        return;
+#endif
     global::g_WindowManager->_inputManager.UpdateMouseCallback(float(xposIn), float(yposIn));
     // float xpos = static_cast<float>(xposIn);
     // float ypos = static_cast<float>(yposIn);
@@ -106,6 +121,10 @@ void MouseCallback(GLFWwindow* window, double xposIn, double yposIn){
 }
 
 void MouseScrollBack(GLFWwindow* window, double xOffset, double yOffset){
+#if TARTARUS_EDITOR
+    if(global::g_WindowManager->_gameEditor._used)
+        return;
+#endif
     global::g_WindowManager->_inputManager.UpdateMouseScrollback(float(xOffset), float(yOffset));
 }
 

@@ -87,7 +87,39 @@ cmake --build build -- install
 
 ## ImGui
 
-Clone the official 
+Clone the official and extract it to the C:/Lib folder. Afterwards create the following file
+```c
+cmake_minimum_required(VERSION 3.10.0)
+project(ImGui)
+
+find_package(glfw3 CONFIG REQUIRED)
+
+add_library(imgui 
+    include/imconfig.h
+    include/imgui.h
+    include/imgui_impl_glfw.h
+    include/imgui_impl_opengl3.h
+    include/imgui_impl_opengl3_loader.h
+    include/imgui_internal.h
+    include/imstb_rectpack.h
+    include/imstb_textedit.h
+    include/imstb_truetype.h
+    src/imgui.cpp
+    src/imgui_demo.cpp
+    src/imgui_draw.cpp
+    src/imgui_impl_glfw.cpp
+    src/imgui_impl_opengl3.cpp
+    src/imgui_tables.cpp
+    src/imgui_widgets.cpp
+)
+target_include_directories(imgui PUBLIC include/)
+
+target_link_libraries(imgui PRIVATE glfw)
+```
+
+Some important sites for the ImGui
+https://pthom.github.io/imgui_explorer/
+https://github.com/ocornut/imgui/wiki
 
 # TODO
 
